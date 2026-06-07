@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex,nofollow" />
+<title>A quiet place to start</title>
+<style>
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:#0e1116;color:#e8eef5;
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,system-ui,sans-serif;
+    font-size:17px;line-height:1.5;-webkit-font-smoothing:antialiased;min-height:100vh;min-height:100dvh}
+  body{display:flex;flex-direction:column;
+    padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left)}
+  main{flex:1;display:flex;flex-direction:column;padding:20px 22px 12px;max-width:560px;margin:0 auto;width:100%}
+  h1{font-size:25px;font-weight:600;letter-spacing:-0.01em;margin:0 0 8px;line-height:1.25}
+  h2{font-size:20px;font-weight:600;margin:0 0 10px}
+  p{margin:0 0 14px;color:#cdd6e1}
+  .muted{color:#8a96a5;font-size:14px}
+  .pad{flex:1;min-height:8px}
+  .btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;
+    padding:16px 18px;border-radius:14px;border:none;font-size:17px;font-weight:600;
+    font-family:inherit;cursor:pointer;text-align:center;text-decoration:none;
+    -webkit-tap-highlight-color:transparent;transition:transform .08s ease,background .15s ease;margin-bottom:10px}
+  .btn:active{transform:scale(0.985)}
+  .btn-primary{background:#3a8bff;color:#fff}
+  .btn-secondary{background:#1c232d;color:#e8eef5;border:1px solid #2a3340}
+  .btn-call{background:#2bb673;color:#fff}
+  .btn-ghost{background:transparent;color:#8a96a5;font-weight:500;padding:10px}
+  textarea,input[type=text]{width:100%;background:#1c232d;border:1px solid #2a3340;color:#e8eef5;
+    border-radius:12px;padding:14px;font:inherit;outline:none;-webkit-appearance:none}
+  textarea{resize:none;min-height:104px}
+  textarea:focus,input[type=text]:focus{border-color:#3a8bff}
+  .input-hint{font-size:13px;color:#6f7a88;margin:6px 0 16px}
+  .screen{display:none;flex:1;flex-direction:column;animation:fade .35s ease}
+  .screen.active{display:flex}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  .scale{margin:16px 0 18px}
+  .scale-row{display:flex;justify-content:space-between;font-size:13px;color:#8a96a5;margin-bottom:6px}
+  input[type=range]{width:100%;-webkit-appearance:none;background:transparent;height:36px}
+  input[type=range]::-webkit-slider-runnable-track{height:6px;background:linear-gradient(90deg,#3a8bff,#2bb673);border-radius:3px}
+  input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;
+    background:#fff;margin-top:-11px;box-shadow:0 2px 8px rgba(0,0,0,0.35);cursor:pointer}
+  .scale-value{font-size:30px;font-weight:600;text-align:center;margin-top:2px}
+  .chips{display:flex;flex-wrap:wrap;gap:9px;margin:6px 0 16px}
+  .chip{background:#1c232d;border:1px solid #2a3340;color:#cdd6e1;border-radius:99px;
+    padding:9px 15px;font-size:15px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:all .12s ease}
+  .chip[aria-pressed="true"]{background:#22364d;border-color:#3a8bff;color:#fff}
+  .steps{display:flex;gap:6px;margin-bottom:16px}
+  .step-dot{flex:1;height:4px;border-radius:2px;background:#1c232d}
+  .step-dot.done{background:#3a8bff}.step-dot.current{background:#2bb673}
+  .save-chip{display:inline-flex;align-items:center;gap:6px;background:#1c232d;color:#8a96a5;
+    font-size:12px;padding:6px 10px;border-radius:99px;margin-bottom:12px;align-self:flex-start}
+  .save-dot{width:6px;height:6px;border-radius:50%;background:#2bb673}
+  .card{background:#161c25;border:1px solid #232c38;border-radius:14px;padding:16px;margin-bottom:12px}
+  .card h3{margin:0 0 6px;font-size:16px;font-weight:600;color:#e8eef5}
+  .card p{margin:0;font-size:15px;color:#a8b3c0}
+  .reflect{background:#15211b;border:1px solid #234634;border-radius:14px;padding:16px 18px;margin:4px 0 16px}
+  .reflect p{margin:0;color:#cfe6d8;font-size:16px;line-height:1.55}
+  .res{display:flex;align-items:center;gap:12px;background:#161c25;border:1px solid #232c38;
+    border-radius:12px;padding:14px;margin-bottom:10px;color:inherit;text-decoration:none;width:100%;
+    text-align:left;font-family:inherit;cursor:pointer}
+  .res:active{background:#1c232d}
+  .res-icon{width:38px;height:38px;border-radius:10px;background:#1c232d;display:flex;
+    align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+  .res-text{flex:1;min-width:0}
+  .res-title{font-weight:600;font-size:15px;margin:0 0 2px}
+  .res-sub{font-size:13px;color:#8a96a5;margin:0}
+  .verified{font-size:11px;color:#5fae84;margin-top:3px}
+  .tier-label{font-size:12px;letter-spacing:0.06em;text-transform:uppercase;color:#6f7a88;
+    font-weight:700;margin:14px 0 8px}
+  .hub-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px}
+  .hub-tile{background:#161c25;border:1px solid #232c38;border-radius:14px;padding:16px 14px;
+    cursor:pointer;font-family:inherit;color:#e8eef5;text-align:left;-webkit-tap-highlight-color:transparent}
+  .hub-tile:active{background:#1c232d}
+  .hub-tile .ico{font-size:22px;display:block;margin-bottom:8px}
+  .hub-tile .t{font-weight:600;font-size:15px}
+  .hub-tile .s{font-size:12px;color:#8a96a5;margin-top:2px}
+  .hub-tile.urgent{grid-column:1 / -1;background:#1d1518;border-color:#3a2630}
+  .topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 22px 0;
+    max-width:560px;margin:0 auto;width:100%}
+  .brand{font-size:13px;letter-spacing:0.06em;text-transform:uppercase;color:#6f7a88;font-weight:600}
+  .reset-link{font-size:12px;color:#6f7a88;background:none;border:none;cursor:pointer;font-family:inherit;padding:4px 8px}
+  .back{background:none;border:none;color:#8a96a5;font-size:14px;padding:0;margin-bottom:16px;
+    cursor:pointer;font-family:inherit;align-self:flex-start}
+  footer{padding:12px 22px calc(14px + env(safe-area-inset-bottom));text-align:center;
+    border-top:1px solid #1c232d;background:#0b0e13;font-size:13px;color:#8a96a5}
+  footer a{color:#e8eef5;font-weight:600;text-decoration:none}
+  .seg{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+  .seg button{flex:1;min-width:88px;background:#1c232d;border:1px solid #2a3340;color:#cdd6e1;
+    border-radius:10px;padding:10px;font:inherit;font-size:14px;cursor:pointer}
+  .seg button[aria-pressed="true"]{background:#22364d;border-color:#3a8bff;color:#fff}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="brand">a quiet place to start</div>
+  <button class="reset-link" id="reset-btn" type="button" hidden>start over</button>
+</div>
+
+<main>
+
+  <!-- LANDING -->
+  <section class="screen" id="screen-landing">
+    <h1>You came back. Or you're here for the first time.</h1>
+    <p>Either way — no name, no account, no sign-in. Nothing you write ever leaves this phone.</p>
+    <p class="muted">Take a breath. Then tap when you're ready.</p>
+    <div class="pad"></div>
+    <button class="btn btn-primary" data-go="values">Begin</button>
+    <button class="btn btn-ghost" data-go="ready">I'm ready to talk to someone now</button>
+  </section>
+
+  <!-- VALUES (first run, gentle) -->
+  <section class="screen" id="screen-values">
+    <button class="back" data-go="landing">← back</button>
+    <h2>Before anything else — what matters to you?</h2>
+    <p class="muted">Not what should matter. What actually does. Tap any that fit. Add your own.</p>
+    <div class="chips" id="values-chips"></div>
+    <input type="text" id="values-custom" placeholder="Something else? Type it here." />
+    <div class="input-hint">This is just for you. It stays on your phone.</div>
+    <div class="pad"></div>
+    <button class="btn btn-primary" data-go="hub">Continue</button>
+    <button class="btn btn-ghost" data-go="hub">Skip for now</button>
+  </section>
+
+  <!-- HOME / HUB -->
+  <section class="screen" id="screen-hub">
+    <div class="save-chip" id="hub-savechip" hidden><span class="save-dot"></span> <span id="hub-savetext">Saved on this phone</span></div>
+    <h1 id="hub-greeting">How are you, right now?</h1>
+    <p class="muted" id="hub-sub">No right answer. Start wherever you want.</p>
+    <div class="hub-grid">
+      <button class="hub-tile" data-go="check"><span class="ico">🌡️</span><span class="t">Check in</span><span class="s">How I'm doing</span></button>
+      <button class="hub-tile" data-go="journal"><span class="ico">📓</span><span class="t">Write</span><span class="s">Get it out</span></button>
+      <button class="hub-tile" data-go="resources"><span class="ico">🧭</span><span class="t">Find help</span><span class="s">What I need today</span></button>
+      <button class="hub-tile" data-go="values"><span class="ico">💠</span><span class="t">What matters</span><span class="s">Remember me</span></button>
+      <button class="hub-tile urgent" data-go="ready"><span class="ico">💬</span><span class="t">Talk to someone now</span><span class="s">A real person, 24/7 — your progress stays saved</span></button>
+    </div>
+    <div class="pad"></div>
+  </section>
+
+  <!-- CHECK IN -->
+  <section class="screen" id="screen-check">
+    <button class="back" data-go="hub">← back</button>
+    <h2>Where are you right now?</h2>
+    <p class="muted">Drag it. That's the whole step.</p>
+    <div class="scale">
+      <div class="scale-row"><span>heavy</span><span>in between</span><span>steady</span></div>
+      <input type="range" id="motivation" min="1" max="10" value="5" />
+      <div class="scale-value" id="motivation-value">5</div>
+    </div>
+    <p class="muted">Anything true right now? (optional — one tap)</p>
+    <div class="chips" id="state-chips"></div>
+    <div class="pad"></div>
+    <button class="btn btn-primary" id="check-next" data-go="reflect">Done</button>
+  </section>
+
+  <!-- JOURNAL -->
+  <section class="screen" id="screen-journal">
+    <button class="back" data-go="hub">← back</button>
+    <h2>What's here right now?</h2>
+    <p class="muted">However it comes out is fine. No one reads this but you.</p>
+    <textarea id="journal-text" placeholder="Type whatever's true."></textarea>
+    <div class="input-hint">Saved only on this phone.</div>
+    <div class="pad"></div>
+    <button class="btn btn-primary" data-go="reflect">Done</button>
+  </section>
+
+  <!-- REFLECT (deterministic, MI-style; asks before advising) -->
+  <section class="screen" id="screen-reflect">
+    <div class="save-chip"><span class="save-dot"></span> Saved on this phone</div>
+    <div class="reflect" id="reflect-box"><p id="reflect-text"></p></div>
+    <div id="nugget-offer" hidden>
+      <p class="muted" id="nugget-q">Want a quick, no-pressure note on that?</p>
+      <button class="btn btn-secondary" id="nugget-yes">Yeah, show me</button>
+      <button class="btn btn-ghost" data-go="hub">No thanks</button>
+    </div>
+    <div id="reflect-default">
+      <div class="pad"></div>
+      <button class="btn btn-primary" data-go="ready">I want to talk to someone</button>
+      <button class="btn btn-secondary" data-go="resources">See what's around me</button>
+      <button class="btn btn-ghost" data-go="hub">I'm okay for now</button>
+    </div>
+  </section>
+
+  <!-- NUGGET (reactive psychoeducation) -->
+  <section class="screen" id="screen-nugget">
+    <button class="back" data-go="hub">← back</button>
+    <h2 id="nugget-title">A quick note</h2>
+    <div class="card"><p id="nugget-body"></p></div>
+    <p class="muted">That's it. No lecture. You decide what to do with it.</p>
+    <div class="pad"></div>
+    <button class="btn btn-primary" data-go="ready">I want to talk to someone</button>
+    <button class="btn btn-ghost" data-go="hub">Back to start</button>
+  </section>
+
+  <!-- RESOURCES (interest-first, priority tiers, last-verified) -->
+  <section class="screen" id="screen-resources">
+    <button class="back" data-go="hub">← back</button>
+    <h1>What do you need today?</h1>
+    <p class="muted">Pick what's true right now. We'll keep it short.</p>
+    <div class="seg" id="need-seg"></div>
+    <div id="res-list"></div>
+    <div class="pad"></div>
+    <button class="btn btn-ghost" data-go="hub">Back to start</button>
+  </section>
+
+  <!-- READY / CALL -->
+  <section class="screen" id="screen-ready">
+    <button class="back" data-go="hub">← back</button>
+    <h1>One tap. Real person.</h1>
+    <p>This is LA County's Substance Abuse Service Helpline. Someone picks up — 24/7, including holidays.</p>
+    <div class="card"><h3>What to expect</h3><p>It's a real conversation, not a form. They'll ask some questions to help find the right fit. Take your time.</p></div>
+    <div class="card"><h3>If you get cut off</h3><p>Battery, signal, anything — everything you've done here is still saved. Come right back to this page.</p></div>
+    <div class="pad"></div>
+    <a class="btn btn-call" href="tel:+18448047500" data-event="sash_call_initiated">📞 Call the Service Helpline</a>
+    <button class="btn btn-ghost" data-go="resources">Other support instead</button>
+  </section>
+
+</main>
+
+<footer>If you are in immediate danger, call <a href="tel:911">911</a> or <a href="tel:988">988</a>.</footer>
+
+<script>
+/* ---------------------------------------------------------------------------
+   The Bridge — v0.2
+   Local-only. No analytics. No PHI. No login. No remote storage. No live LLM.
+   Sue's clinical model, rendered deterministically:
+     values discovery · check-in · journal · MI-style reflection (ask-before-advise)
+     · reactive psychoeducation nuggets · interest-first resources w/ last-verified
+   State key: bridge.state.v2  (migrates v1 if present)
+--------------------------------------------------------------------------- */
+const STATE_KEY='bridge.state.v2';
+const screens=document.querySelectorAll('.screen');
+const resetBtn=document.getElementById('reset-btn');
+
+/* ---- state ---- */
+function loadState(){try{return JSON.parse(localStorage.getItem(STATE_KEY)||'{}')}catch(_){return{}}}
+function saveState(patch){const s={...loadState(),...patch,ts:Date.now()};try{localStorage.setItem(STATE_KEY,JSON.stringify(s))}catch(_){}}
+function clearState(){try{localStorage.removeItem(STATE_KEY);localStorage.removeItem('bridge.state.v1')}catch(_){}}
+function hasProgress(){const s=loadState();return !!(s.values&&s.values.length||s.motivation||s.journal||s.visited)}
+
+/* ---- content libraries (deterministic) ---- */
+const VALUES=['My kids','My family','Staying free','My health','My dog','Faith','Work','A roof','Feeling like myself','Someone who needs me','Peace','Getting back to who I was'];
+const STATES=[{k:'influence',t:'Not sober right now'},{k:'hungry',t:'Hungry'},{k:'nosleep',t:"Can't sleep"},{k:'lonely',t:'Lonely'},{k:'pain',t:'In pain'},{k:'okay',t:'Actually okay'}];
+
+/* reactive psychoeducation — gated behind an ASK. Keyword -> nugget. */
+const NUGGETS=[
+  {keys:['alcohol','drank','drink','drinking','beer','wine','vodka','whiskey','hungover','hangover'],
+   q:'Want a quick, no-pressure note about alcohol and the body?',
+   title:'About alcohol and how you feel',
+   body:'A rough morning after drinking is mostly dehydration and your body clearing the alcohol — water, food, and rest help more than another drink. If you ever shake badly, sweat, or feel your heart racing when you cut back, that’s a sign to talk to someone medical, because stopping heavy drinking suddenly can be dangerous. No judgment — just worth knowing.'},
+  {keys:['opioid','opioids','heroin','fentanyl','fent','pills','oxy','percocet','dope'],
+   q:'Want a quick safety note — no lecture?',
+   title:'A safety note',
+   body:'If you use opioids, naloxone (Narcan) can reverse an overdose and it’s free at many LA County sites — having some nearby, and not using alone, saves lives. Tolerance drops fast after even a few days off, so a normal amount can become too much. You can ask the Service Helpline where to get naloxone near you.'},
+  {keys:['meth','stimulant','coke','cocaine','speed','crystal','adderall'],
+   q:'Want a quick note about what your body’s doing?',
+   title:'About stimulants and your body',
+   body:'Stimulants keep you going past where your body would normally rest, so the crash — exhaustion, low mood, big hunger — is your body trying to catch up. Water, food, and sleep are the real recovery. If your chest hurts or your heart pounds hard, that’s a reason to get checked.'},
+  {keys:['sleep','tired','exhausted','awake','insomnia','rest'],
+   q:'Want one small idea about sleep?',
+   title:'About sleep',
+   body:'When everything’s heavy, sleep is often the first thing that breaks and the last thing we protect. Even a dark, quiet hour with your phone face-down counts. You don’t have to fix the night — just give your body somewhere to land.'},
+  {keys:['alone','lonely','nobody','isolated','myself'],
+   q:'Want a thought on this?',
+   title:'On feeling alone',
+   body:'Feeling alone and being beyond help are not the same thing, even though they feel identical from the inside. You opened this. That’s a thread back. The people on the Service Helpline do this all day, every day — reaching out isn’t a burden to them, it’s the whole point.'}
+];
+
+/* resources — interest-first, priority-tiered, last-verified badges (demo data) */
+const VERIFIED='Verified Jun 5, 2026';
+const NEEDS=[
+  {k:'talk',t:'Talk'},{k:'food',t:'Food'},{k:'sleep',t:'A bed'},
+  {k:'safer',t:'Stay safer'},{k:'meet',t:'Meetings'}
+];
+const RESOURCES={
+  talk:[{tier:'Right now',icon:'💬',title:'Service Helpline',sub:'1-844-804-7500 · 24/7',verified:VERIFIED,href:'tel:+18448047500',event:'sash_call_initiated'},
+        {tier:'Right now',icon:'🆘',title:'988 — Crisis Lifeline',sub:'Call or text 988',verified:VERIFIED,href:'tel:988',event:'988_initiated'}],
+  food:[{tier:'Today',icon:'🍲',title:'Community meal — nearby',sub:'Hot meals, no questions',verified:VERIFIED,note:'demo listing'},
+        {tier:'This week',icon:'🥫',title:'Food pantry',sub:'Groceries to take',verified:VERIFIED,note:'demo listing'}],
+  sleep:[{tier:'Tonight',icon:'🛏️',title:'Shelter intake line',sub:'Beds open tonight',verified:VERIFIED,note:'demo listing'},
+         {tier:'This week',icon:'🏠',title:'Recovery bridge housing',sub:'Longer-term, via Helpline',verified:VERIFIED,href:'tel:+18448047500',event:'sash_call_initiated'}],
+  safer:[{tier:'Right now',icon:'🧰',title:'Naloxone near you',sub:'Free — ask where',verified:VERIFIED,href:'tel:+18448047500',event:'sash_call_initiated'},
+         {tier:'Right now',icon:'💉',title:'Syringe services',sub:'Clean supplies, no judgment',verified:VERIFIED,note:'demo listing'}],
+  meet:[{tier:'Today',icon:'👥',title:'AA / NA meeting finder',sub:'In person and online',verified:VERIFIED,note:'demo listing'},
+        {tier:'This week',icon:'🤝',title:'Peer support group',sub:'People who get it',verified:VERIFIED,note:'demo listing'}]
+};
+
+/* ---- routing ---- */
+function show(name){
+  screens.forEach(s=>s.classList.remove('active'));
+  const el=document.getElementById('screen-'+name);
+  if(el)el.classList.add('active');
+  saveState({lastScreen:name,visited:true});
+  resetBtn.hidden=!hasProgress();
+  if(name==='hub')renderHub();
+  window.scrollTo(0,0);
+}
+document.querySelectorAll('[data-go]').forEach(b=>b.addEventListener('click',()=>{captureInputs();show(b.getAttribute('data-go'))}));
+
+function captureInputs(){
+  const j=document.getElementById('journal-text');if(j)saveState({journal:j.value});
+  const c=document.getElementById('values-custom');
+  if(c&&c.value.trim()){const s=loadState();const v=new Set(s.values||[]);v.add(c.value.trim());saveState({values:[...v]});c.value=''}
+}
+
+/* ---- values ---- */
+function renderValues(){
+  const wrap=document.getElementById('values-chips');const s=loadState();const sel=new Set(s.values||[]);
+  wrap.innerHTML='';
+  VALUES.forEach(v=>{
+    const b=document.createElement('button');b.className='chip';b.textContent=v;
+    b.setAttribute('aria-pressed',sel.has(v)?'true':'false');
+    b.addEventListener('click',()=>{const cur=new Set((loadState().values)||[]);
+      if(cur.has(v))cur.delete(v);else cur.add(v);saveState({values:[...cur]});
+      b.setAttribute('aria-pressed',cur.has(v)?'true':'false')});
+    wrap.appendChild(b);
+  });
+}
+
+/* ---- check-in state chips ---- */
+function renderStateChips(){
+  const wrap=document.getElementById('state-chips');const cur=loadState().curState||'';
+  wrap.innerHTML='';
+  STATES.forEach(st=>{
+    const b=document.createElement('button');b.className='chip';b.textContent=st.t;
+    b.setAttribute('aria-pressed',cur===st.k?'true':'false');
+    b.addEventListener('click',()=>{const now=loadState().curState===st.k?'':st.k;saveState({curState:now});renderStateChips()});
+    wrap.appendChild(b);
+  });
+}
+
+/* ---- hub ---- */
+function renderHub(){
+  const s=loadState();
+  const chip=document.getElementById('hub-savechip');const txt=document.getElementById('hub-savetext');
+  const greet=document.getElementById('hub-greeting');const sub=document.getElementById('hub-sub');
+  const returning=!!(s.values&&s.values.length||s.journal||s.motivation);
+  chip.hidden=!returning;
+  if(returning){
+    const v=(s.values&&s.values.length)?s.values[0]:null;
+    txt.textContent=v?('You told us '+v.toLowerCase()+' matters'):'Saved on this phone';
+    greet.textContent='Good to see you again.';
+    sub.textContent='Your place is held. Pick up wherever.';
+  }else{greet.textContent='How are you, right now?';sub.textContent='No right answer. Start wherever you want.';}
+}
+
+/* ---- reflection (deterministic, unconditional positive regard, ask-before-advise) ---- */
+function buildReflection(){
+  const s=loadState();const txt=document.getElementById('reflect-text');
+  const lines=[];
+  lines.push('You showed up and put something down. That counts — more than it feels like right now.');
+  if(s.curState==='influence')lines.push('You said you’re not sober right now, and you came here anyway. That takes something.');
+  if(s.curState==='okay')lines.push('You said you’re actually okay. Good. Worth noticing the steady moments too.');
+  if(s.values&&s.values.length){
+    const v=s.values[0].toLowerCase();
+    lines.push('Earlier you said '+v+' matters to you. That’s still true, even on a heavy day. Especially on a heavy day.');
+  }
+  if(typeof s.motivation==='number'){
+    if(s.motivation<=3)lines.push('Things feel heavy right now. You don’t have to carry the whole thing — just the next small piece.');
+    else if(s.motivation>=8)lines.push('Something feels a little steadier. If part of you is ready, that part gets to lead.');
+  }
+  txt.textContent=lines.join(' ');
+
+  /* reactive psychoeducation — only OFFER, never push (Sue: ask before advising) */
+  const nug=matchNugget(s.journal||'');
+  const offer=document.getElementById('nugget-offer');const def=document.getElementById('reflect-default');
+  if(nug){document.getElementById('nugget-q').textContent=nug.q;offer.hidden=false;def.hidden=false;
+    document.getElementById('nugget-yes').onclick=()=>{showNugget(nug)};saveState({pendingNugget:nug.title});}
+  else{offer.hidden=true;def.hidden=false;}
+}
+function matchNugget(text){const t=(text||'').toLowerCase();return NUGGETS.find(n=>n.keys.some(k=>t.includes(k)))||null;}
+function showNugget(n){document.getElementById('nugget-title').textContent=n.title;
+  document.getElementById('nugget-body').textContent=n.body;show('nugget');}
+
+/* ---- resources ---- */
+function renderNeedSeg(){
+  const seg=document.getElementById('need-seg');const cur=loadState().need||'talk';
+  seg.innerHTML='';
+  NEEDS.forEach(n=>{
+    const b=document.createElement('button');b.textContent=n.t;b.setAttribute('aria-pressed',cur===n.k?'true':'false');
+    b.addEventListener('click',()=>{saveState({need:n.k});renderNeedSeg();renderResList()});
+    seg.appendChild(b);
+  });
+}
+function renderResList(){
+  const list=document.getElementById('res-list');const need=loadState().need||'talk';
+  const items=RESOURCES[need]||[];const tiers=[];
+  items.forEach(it=>{if(!tiers.includes(it.tier))tiers.push(it.tier)});
+  list.innerHTML='';
+  tiers.forEach(tier=>{
+    const lab=document.createElement('div');lab.className='tier-label';lab.textContent=tier;list.appendChild(lab);
+    items.filter(i=>i.tier===tier).forEach(it=>{
+      const el=document.createElement(it.href?'a':'button');el.className='res';
+      if(it.href){el.href=it.href;if(it.event)el.setAttribute('data-event',it.event);}
+      el.innerHTML='<div class="res-icon">'+it.icon+'</div><div class="res-text">'+
+        '<div class="res-title">'+it.title+'</div><div class="res-sub">'+it.sub+'</div>'+
+        '<div class="verified">✓ '+it.verified+(it.note?' · '+it.note:'')+'</div></div>';
+      list.appendChild(el);
+    });
+  });
+}
+
+/* ---- slider ---- */
+const slider=document.getElementById('motivation');const sv=document.getElementById('motivation-value');
+if(slider)slider.addEventListener('input',()=>{sv.textContent=slider.value;saveState({motivation:Number(slider.value)})});
+
+/* ---- check 'Done' builds reflection ---- */
+document.getElementById('check-next').addEventListener('click',()=>{captureInputs();});
+document.querySelectorAll('[data-go="reflect"]').forEach(b=>b.addEventListener('click',()=>{setTimeout(buildReflection,10)}));
+
+/* ---- reset ---- */
+resetBtn.addEventListener('click',()=>{if(confirm('Clear everything saved here?')){clearState();
+  if(slider){slider.value=5;sv.textContent='5';}const j=document.getElementById('journal-text');if(j)j.value='';
+  renderValues();renderStateChips();show('landing');}});
+
+/* ---- init ---- */
+(function init(){
+  renderValues();renderStateChips();renderNeedSeg();renderResList();
+  const s=loadState();
+  if(typeof s.motivation==='number'&&slider){slider.value=s.motivation;sv.textContent=s.motivation;}
+  const j=document.getElementById('journal-text');if(j&&s.journal)j.value=s.journal;
+  /* return-user pathway: if they have progress, drop them on the hub, not the cold landing */
+  let start='landing';
+  if(s.lastScreen&&document.getElementById('screen-'+s.lastScreen))start=s.lastScreen;
+  if(hasProgress()&&(start==='landing'))start='hub';
+  show(start);
+})();
+</script>
+</body>
+</html>
