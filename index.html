@@ -101,14 +101,78 @@
 
 <main>
 
-  <!-- LANDING -->
+  <!-- LANDING (two doors) -->
   <section class="screen" id="screen-landing">
-    <h1>You came back. Or you're here for the first time.</h1>
-    <p>Either way — no name, no account, no sign-in. Nothing you write ever leaves this phone.</p>
-    <p class="muted">Take a breath. Then tap when you're ready.</p>
+    <h1>A quiet place to start.</h1>
+    <p>No name, no account, no sign-in. Nothing you write ever leaves this phone.</p>
+    <p class="muted">Who are you here for?</p>
     <div class="pad"></div>
-    <button class="btn btn-primary" data-go="values">Begin</button>
+    <button class="btn btn-primary" data-go="values">I'm here for myself</button>
+    <button class="btn btn-secondary" data-go="loved-intro">I'm worried about someone I care about</button>
     <button class="btn btn-ghost" data-go="ready">I'm ready to talk to someone now</button>
+  </section>
+
+  <!-- ============ DOOR 2: CONCERNED OTHER ============ -->
+
+  <!-- LOVED — INTRO -->
+  <section class="screen" id="screen-loved-intro">
+    <button class="back" data-go="landing">← back</button>
+    <h1>You noticed something. That care matters.</h1>
+    <p>You don't need a label, a diagnosis, or a crisis to help someone feel less alone.</p>
+    <p>Most people who are struggling hide it — not because they can't see it, but because they're afraid of being judged. The most powerful thing you can offer isn't a fix. It's staying close.</p>
+    <div class="pad"></div>
+    <button class="btn btn-primary" data-go="loved-how">How do I help without pushing?</button>
+    <button class="btn btn-secondary" data-go="loved-truth">What if they don't think they have a problem?</button>
+    <button class="btn btn-ghost" data-go="loved-help">Show me ways to help right now</button>
+  </section>
+
+  <!-- LOVED — HOW (steady presence) -->
+  <section class="screen" id="screen-loved-how">
+    <button class="back" data-go="loved-intro">← back</button>
+    <h2>How to be a steady presence</h2>
+    <p class="muted">You can't make someone ready. You can make sure they're not alone when they are.</p>
+    <div class="card"><h3>Ask, don't lecture</h3><p>"How are you, really?" opens more doors than "you need to stop." Curiosity feels like care; pressure feels like judgment.</p></div>
+    <div class="card"><h3>Normalize, don't shame</h3><p>"A lot of people go through this" lands better than an ultimatum. Shame drives it underground; acceptance brings it into the light.</p></div>
+    <div class="card"><h3>Stay connected, drop the timeline</h3><p>Readiness comes in windows, not on schedule. Your job isn't a confession today — it's being someone they trust when a window opens.</p></div>
+    <div class="pad"></div>
+    <button class="btn btn-primary" data-go="loved-help">Ways to help right now</button>
+  </section>
+
+  <!-- LOVED — TRUTH (de-stigmatize / success stories) -->
+  <section class="screen" id="screen-loved-truth">
+    <button class="back" data-go="loved-intro">← back</button>
+    <h2>"They don't think they have a problem."</h2>
+    <p>That's the most common place to start — and it isn't only denial. The old story said you're either "a junkie" or you're fine. Nobody wants the first label, so people quietly decide they must be the second.</p>
+    <div class="card"><h3>The fears that keep people silent</h3><p>"I'll lose my job." "My family will leave." "Everyone will know." So they say nothing, sometimes for years.</p></div>
+    <div class="reflect"><p><b>What people who got support actually report:</b> relationships got <i>stronger</i>. Work didn't fall apart. Quality of life went up, not down. The secret turned out to be heavier than the help.</p></div>
+    <p class="muted">Progress beats perfection. No one has to hit bottom — or quit everything overnight — to start feeling better.</p>
+    <div class="pad"></div>
+    <button class="btn btn-primary" data-go="loved-how">How do I support them?</button>
+    <button class="btn btn-secondary" data-go="loved-help">Find people &amp; resources nearby</button>
+  </section>
+
+  <!-- LOVED — HELP (act now + share) -->
+  <section class="screen" id="screen-loved-help">
+    <button class="back" data-go="loved-intro">← back</button>
+    <h1>Ways to help — right now.</h1>
+    <a class="res" href="tel:+18448047500" data-event="sash_call_initiated">
+      <div class="res-icon">💬</div>
+      <div class="res-text"><div class="res-title">Talk it through yourself</div>
+        <div class="res-sub">The Service Helpline guides families too · 1-844-804-7500 · 24/7</div></div>
+    </a>
+    <button class="res" data-go="resources">
+      <div class="res-icon">🧭</div>
+      <div class="res-text"><div class="res-title">See what's around you</div>
+        <div class="res-sub">Groups, people, and places nearby — by what's needed</div></div>
+    </button>
+    <button class="res" id="loved-share">
+      <div class="res-icon">🤍</div>
+      <div class="res-text"><div class="res-title">When they're ready, send them this</div>
+        <div class="res-sub">A private place to start — nothing tracked. Copy a link.</div></div>
+    </button>
+    <p class="muted" id="share-confirm" hidden>Link copied. Share it whenever the moment feels right.</p>
+    <div class="pad"></div>
+    <button class="btn btn-ghost" data-go="landing">Back to start</button>
   </section>
 
   <!-- VALUES (first run, gentle) -->
@@ -223,11 +287,12 @@
 
 <script>
 /* ---------------------------------------------------------------------------
-   The Bridge — v0.2
+   The Bridge — v0.3
    Local-only. No analytics. No PHI. No login. No remote storage. No live LLM.
-   Sue's clinical model, rendered deterministically:
-     values discovery · check-in · journal · MI-style reflection (ask-before-advise)
-     · reactive psychoeducation nuggets · interest-first resources w/ last-verified
+   TWO DOORS: "for myself" (Sue's clinical model) + "worried about someone" (concerned-other).
+   Concerned-other path = destigmatize · normalize · steady-presence · success-stories · share.
+   Self path: values discovery · check-in · journal · MI reflection (ask-before-advise)
+     · reactive psychoeducation nuggets · interest-first resources w/ last-verified.
    State key: bridge.state.v2  (migrates v1 if present)
 --------------------------------------------------------------------------- */
 const STATE_KEY='bridge.state.v2';
@@ -238,7 +303,7 @@ const resetBtn=document.getElementById('reset-btn');
 function loadState(){try{return JSON.parse(localStorage.getItem(STATE_KEY)||'{}')}catch(_){return{}}}
 function saveState(patch){const s={...loadState(),...patch,ts:Date.now()};try{localStorage.setItem(STATE_KEY,JSON.stringify(s))}catch(_){}}
 function clearState(){try{localStorage.removeItem(STATE_KEY);localStorage.removeItem('bridge.state.v1')}catch(_){}}
-function hasProgress(){const s=loadState();return !!(s.values&&s.values.length||s.motivation||s.journal||s.visited)}
+function hasProgress(){const s=loadState();return !!(s.values&&s.values.length||s.motivation||s.journal)}
 
 /* ---- content libraries (deterministic) ---- */
 const VALUES=['My kids','My family','Staying free','My health','My dog','Faith','Work','A roof','Feeling like myself','Someone who needs me','Peace','Getting back to who I was'];
@@ -401,6 +466,14 @@ function renderResList(){
     });
   });
 }
+
+/* ---- loved-one: copy a private link to share ---- */
+const shareBtn=document.getElementById('loved-share');
+if(shareBtn)shareBtn.addEventListener('click',async()=>{
+  const url=location.href.split('#')[0];
+  try{await navigator.clipboard.writeText(url);}catch(_){}
+  const c=document.getElementById('share-confirm');if(c)c.hidden=false;
+});
 
 /* ---- slider ---- */
 const slider=document.getElementById('motivation');const sv=document.getElementById('motivation-value');
