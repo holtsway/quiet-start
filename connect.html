@@ -425,6 +425,23 @@ function renderResults() {
   } else {
     /* Standard path */
     const catKey = needToCat(needKey);
+
+    /* Treatment-only clarifying info card */
+    if (needKey === 'treatment') {
+      const infoCard = document.createElement('div');
+      infoCard.className = 'res-card';
+      infoCard.innerHTML =
+        '<div style="font-size:13px;font-weight:700;color:#5fae84;margin-bottom:6px;' +
+        'text-transform:uppercase;letter-spacing:0.04em">About sober living (Recovery Bridge Housing)</div>' +
+        '<p style="font-size:15px;color:#a8b3c0;margin:0 0 12px;line-height:1.55">' +
+        'In LA County, Recovery Bridge Housing isn’t a stand-alone option — it’s available once ' +
+        'you’re enrolled in an <strong>outpatient program</strong>. The best first step is to start ' +
+        'outpatient care, then ask your provider about RBH.</p>' +
+        '<a href="https://sudhelpla.org" target="_blank" rel="noopener" ' +
+        'class="res-btn res-btn-open">See live housing options on SBAT →</a>';
+      container.appendChild(infoCard);
+    }
+
     const local = matchResources(catKey, spaId);
     const global = matchResources(catKey, null);
     appendResourceSection(container, local, global, spa, catKey, false);
