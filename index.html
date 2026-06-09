@@ -429,7 +429,7 @@ function buildReflection(){
 
   /* anger-aware mode — absorbs, validates, never scolds; offers control only */
   if(matchAnger(s.journal||’’,s.curState||’’)){
-    txt.textContent=’That anger makes sense — and you don’t have to soften it here. Carrying this is exhausting. When everything feels raw like this, that’s often your system under strain talking, not a flaw in you. I’m not going anywhere.’;
+    txt.textContent=’That anger makes sense — and you don’t have to soften it here. Carrying this is exhausting. When everything feels raw like this, that’s often your system under strain talking, not a flaw in you. I’m not going anywhere.\n\nAnger like this is energy — it usually means something matters to you. When you’re ready, that energy can point you toward what you want to be different.’;
     offer.hidden=true;
     def.hidden=true;
     /* render anger-specific choices */
@@ -439,6 +439,8 @@ function buildReflection(){
       def.parentNode.insertBefore(ac,def.nextSibling);
     }
     ac.innerHTML=’’;
+    /* hide MI panel if it was open from a prior visit */
+    const oldMi=document.getElementById(‘anger-mi-panel’);if(oldMi)oldMi.remove();
     /* choice (a) */
     const btnA=document.createElement(‘button’);btnA.className=’btn btn-secondary’;
     btnA.textContent=’I just needed to say that’;
@@ -462,6 +464,52 @@ function buildReflection(){
     btnC.textContent=’I want to talk to a person’;
     btnC.addEventListener(‘click’,()=>{captureInputs();show(‘ready’)});
     ac.appendChild(btnC);
+    /* choice (d) — MI evocative / "What’s underneath it?" */
+    const btnD=document.createElement(‘button’);btnD.className=’btn btn-secondary’;
+    btnD.textContent=’What’s underneath it?’;
+    btnD.addEventListener(‘click’,()=>{
+      /* hide the choice buttons while the MI panel is open */
+      ac.style.display=’none’;
+      const sl=document.getElementById(‘anger-safety’);if(sl)sl.style.display=’none’;
+      /* build MI panel */
+      let mi=document.getElementById(‘anger-mi-panel’);
+      if(!mi){
+        mi=document.createElement(‘div’);mi.id=’anger-mi-panel’;
+        mi.style.cssText=’animation:fade .35s ease’;
+        /* insert right after the reflect-box */
+        const box=document.getElementById(‘reflect-box’);
+        box.parentNode.insertBefore(mi,box.nextSibling);
+      }
+      mi.innerHTML=’’;
+      const miCard=document.createElement(‘div’);miCard.className=’reflect’;
+      miCard.style.cssText=’margin-top:8px’;
+      miCard.innerHTML=
+        ‘<p style="margin:0 0 10px;color:#cfe6d8;font-size:16px;line-height:1.55">’+
+        ‘No rush. If you want to: <strong>what is the anger pointing at?</strong></p>’+
+        ‘<p style="margin:0 0 10px;color:#cfe6d8;font-size:16px;line-height:1.55">’+
+        ‘What would you want to be different — even a little?</p>’;
+      mi.appendChild(miCard);
+      const miHint=document.createElement(‘p’);miHint.className=’input-hint’;
+      miHint.textContent=’You don’t have to answer. If it helps to write, it stays only on this phone.’;
+      mi.appendChild(miHint);
+      const miTa=document.createElement(‘textarea’);miTa.id=’anger-mi-text’;
+      miTa.placeholder=’Whatever’s true for you right now.’;
+      miTa.style.cssText=’margin-bottom:10px’;
+      /* restore any previously typed reflection */
+      const saved=loadState();if(saved.angerMiText)miTa.value=saved.angerMiText;
+      miTa.addEventListener(‘input’,()=>{saveState({angerMiText:miTa.value})});
+      mi.appendChild(miTa);
+      const miBack=document.createElement(‘button’);miBack.className=’btn btn-ghost’;
+      miBack.textContent=’I’m good for now’;
+      miBack.addEventListener(‘click’,()=>{
+        mi.remove();
+        ac.style.display=’’;
+        const slr=document.getElementById(‘anger-safety’);if(slr)slr.style.display=’’;
+        show(‘hub’);
+      });
+      mi.appendChild(miBack);
+    });
+    ac.appendChild(btnD);
     /* persistent safety line */
     let sl=document.getElementById(‘anger-safety’);
     if(!sl){
