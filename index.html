@@ -284,7 +284,7 @@
 
 </main>
 
-<footer>If you are in immediate danger, call <a href="tel:911">911</a> or <a href="tel:988">988</a>.</footer>
+<footer>If you are in immediate danger, call <a href="tel:911">911</a> or <a href="tel:988">988</a>.<br><span class="muted" style="display:block;margin-top:6px">This isn't therapy or a diagnosis — just a private place to start.</span></footer>
 
 <script>
 /* ---------------------------------------------------------------------------
@@ -308,7 +308,7 @@ function hasProgress(){const s=loadState();return !!(s.values&&s.values.length||
 
 /* ---- content libraries (deterministic) ---- */
 const VALUES=['My kids','My family','Staying free','My health','My dog','Faith','Work','A roof','Feeling like myself','Someone who needs me','Peace','Getting back to who I was'];
-const STATES=[{k:'influence',t:'Not sober right now'},{k:'hungry',t:'Hungry'},{k:'nosleep',t:"Can't sleep"},{k:'lonely',t:'Lonely'},{k:'pain',t:'In pain'},{k:'okay',t:'Actually okay'}];
+const STATES=[{k:'influence',t:'Not sober right now'},{k:'hungry',t:'Hungry'},{k:'nosleep',t:"Can't sleep"},{k:'lonely',t:'Lonely'},{k:'pain',t:'In pain'},{k:'okay',t:'Actually okay'},{k:'angry',t:'Angry / fed up'}];
 
 /* reactive psychoeducation — gated behind an ASK. Keyword -> nugget. */
 const NUGGETS=[
@@ -412,31 +412,93 @@ function renderHub(){
   }else{greet.textContent='How are you, right now?';sub.textContent='No right answer. Start wherever you want.';}
 }
 
+/* ---- anger detection ---- */
+const ANGER_WORDS=[‘angry’,’anger’,’pissed’,’furious’,’rage’,’raging’,’fed up’,’sick of’,
+  ‘no one listens’,’nobody listens’,’nobody cares’,’bullshit’,’useless’,’pointless’,
+  ‘screw this’,’screw it’,’give up’,"can’t do this",’fuck’,’f*ck’,’hate this’,’hate everything’];
+function matchAnger(text,state){
+  if(state===’angry’)return true;
+  const t=(text||’’).toLowerCase();
+  return ANGER_WORDS.some(w=>t.includes(w));
+}
+
 /* ---- reflection (deterministic, unconditional positive regard, ask-before-advise) ---- */
 function buildReflection(){
-  const s=loadState();const txt=document.getElementById('reflect-text');
+  const s=loadState();const txt=document.getElementById(‘reflect-text’);
+  const offer=document.getElementById(‘nugget-offer’);const def=document.getElementById(‘reflect-default’);
+
+  /* anger-aware mode — absorbs, validates, never scolds; offers control only */
+  if(matchAnger(s.journal||’’,s.curState||’’)){
+    txt.textContent=’That anger makes sense — and you don’t have to soften it here. Carrying this is exhausting. When everything feels raw like this, that’s often your system under strain talking, not a flaw in you. I’m not going anywhere.’;
+    offer.hidden=true;
+    def.hidden=true;
+    /* render anger-specific choices */
+    let ac=document.getElementById(‘anger-choices’);
+    if(!ac){
+      ac=document.createElement(‘div’);ac.id=’anger-choices’;
+      def.parentNode.insertBefore(ac,def.nextSibling);
+    }
+    ac.innerHTML=’’;
+    /* choice (a) */
+    const btnA=document.createElement(‘button’);btnA.className=’btn btn-secondary’;
+    btnA.textContent=’I just needed to say that’;
+    btnA.addEventListener(‘click’,()=>{
+      txt.textContent=’Said. That took something. I’m still right here whenever you come back.’;
+      ac.innerHTML=’’;
+      const backBtn=document.createElement(‘button’);backBtn.className=’btn btn-ghost’;
+      backBtn.textContent=’Back to the hub’;backBtn.setAttribute(‘data-go’,’hub’);
+      backBtn.addEventListener(‘click’,()=>{captureInputs();show(‘hub’)});
+      ac.appendChild(backBtn);
+      const sl=document.getElementById(‘anger-safety’);if(sl)sl.style.display=’’;
+    });
+    ac.appendChild(btnA);
+    /* choice (b) */
+    const btnB=document.createElement(‘button’);btnB.className=’btn btn-secondary’;
+    btnB.textContent=’Help me find a next step’;
+    btnB.addEventListener(‘click’,()=>{captureInputs();show(‘resources’)});
+    ac.appendChild(btnB);
+    /* choice (c) */
+    const btnC=document.createElement(‘button’);btnC.className=’btn btn-primary’;
+    btnC.textContent=’I want to talk to a person’;
+    btnC.addEventListener(‘click’,()=>{captureInputs();show(‘ready’)});
+    ac.appendChild(btnC);
+    /* persistent safety line */
+    let sl=document.getElementById(‘anger-safety’);
+    if(!sl){
+      sl=document.createElement(‘p’);sl.id=’anger-safety’;sl.className=’muted’;
+      sl.style.cssText=’margin-top:12px;font-size:13px;line-height:1.5’;
+      sl.textContent=’If the anger ever turns toward hurting yourself or someone else, you can reach a real person right now — call or text 988.’;
+      ac.parentNode.insertBefore(sl,ac.nextSibling);
+    }
+    sl.style.display=’’;
+    return;
+  }
+
+  /* hide anger UI if we re-enter reflect in a non-anger state */
+  const ac=document.getElementById(‘anger-choices’);if(ac)ac.innerHTML=’’;
+  const sl=document.getElementById(‘anger-safety’);if(sl)sl.style.display=’none’;
+
   const lines=[];
-  lines.push('You showed up and put something down. That counts — more than it feels like right now.');
-  if(s.curState==='influence')lines.push('You said you’re not sober right now, and you came here anyway. That takes something.');
-  if(s.curState==='okay')lines.push('You said you’re actually okay. Good. Worth noticing the steady moments too.');
+  lines.push(‘You showed up and put something down. That counts — more than it feels like right now.’);
+  if(s.curState===’influence’)lines.push(‘You said you’re not sober right now, and you came here anyway. That takes something.’);
+  if(s.curState===’okay’)lines.push(‘You said you’re actually okay. Good. Worth noticing the steady moments too.’);
   if(s.values&&s.values.length){
     const v=s.values[0].toLowerCase();
-    lines.push('Earlier you said '+v+' matters to you. That’s still true, even on a heavy day. Especially on a heavy day.');
+    lines.push(‘Earlier you said ‘+v+’ matters to you. That’s still true, even on a heavy day. Especially on a heavy day.’);
   }
-  if(typeof s.motivation==='number'){
-    if(s.motivation<=3)lines.push('Things feel heavy right now. You don’t have to carry the whole thing — just the next small piece.');
-    else if(s.motivation>=8)lines.push('Something feels a little steadier. If part of you is ready, that part gets to lead.');
+  if(typeof s.motivation===’number’){
+    if(s.motivation<=3)lines.push(‘Things feel heavy right now. You don’t have to carry the whole thing — just the next small piece.’);
+    else if(s.motivation>=8)lines.push(‘Something feels a little steadier. If part of you is ready, that part gets to lead.’);
   }
-  txt.textContent=lines.join(' ');
+  txt.textContent=lines.join(‘ ‘);
 
   /* reactive psychoeducation — only OFFER, never push (Sue: ask before advising) */
-  const nug=matchNugget(s.journal||'');
-  const offer=document.getElementById('nugget-offer');const def=document.getElementById('reflect-default');
-  if(nug){document.getElementById('nugget-q').textContent=nug.q;offer.hidden=false;def.hidden=false;
-    document.getElementById('nugget-yes').onclick=()=>{showNugget(nug)};saveState({pendingNugget:nug.title});}
+  const nug=matchNugget(s.journal||’’);
+  if(nug){document.getElementById(‘nugget-q’).textContent=nug.q;offer.hidden=false;def.hidden=false;
+    document.getElementById(‘nugget-yes’).onclick=()=>{showNugget(nug)};saveState({pendingNugget:nug.title});}
   else{offer.hidden=true;def.hidden=false;}
 }
-function matchNugget(text){const t=(text||'').toLowerCase();return NUGGETS.find(n=>n.keys.some(k=>t.includes(k)))||null;}
+function matchNugget(text){const t=(text||’’).toLowerCase();return NUGGETS.find(n=>n.keys.some(k=>t.includes(k)))||null;}
 function showNugget(n){document.getElementById('nugget-title').textContent=n.title;
   document.getElementById('nugget-body').textContent=n.body;show('nugget');}
 
