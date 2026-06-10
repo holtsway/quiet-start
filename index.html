@@ -413,140 +413,140 @@ function renderHub(){
 }
 
 /* ---- anger detection ---- */
-const ANGER_WORDS=[‘angry’,’anger’,’pissed’,’furious’,’rage’,’raging’,’fed up’,’sick of’,
-  ‘no one listens’,’nobody listens’,’nobody cares’,’bullshit’,’useless’,’pointless’,
-  ‘screw this’,’screw it’,’give up’,"can’t do this",’fuck’,’f*ck’,’hate this’,’hate everything’];
+const ANGER_WORDS=['angry','anger','pissed','furious','rage','raging','fed up','sick of',
+  'no one listens','nobody listens','nobody cares','bullshit','useless','pointless',
+  'screw this','screw it','give up',"can't do this",'fuck','f*ck','hate this','hate everything'];
 function matchAnger(text,state){
-  if(state===’angry’)return true;
-  const t=(text||’’).toLowerCase();
+  if(state==='angry')return true;
+  const t=(text||'').toLowerCase();
   return ANGER_WORDS.some(w=>t.includes(w));
 }
 
 /* ---- reflection (deterministic, unconditional positive regard, ask-before-advise) ---- */
 function buildReflection(){
-  const s=loadState();const txt=document.getElementById(‘reflect-text’);
-  const offer=document.getElementById(‘nugget-offer’);const def=document.getElementById(‘reflect-default’);
+  const s=loadState();const txt=document.getElementById('reflect-text');
+  const offer=document.getElementById('nugget-offer');const def=document.getElementById('reflect-default');
 
   /* anger-aware mode — absorbs, validates, never scolds; offers control only */
-  if(matchAnger(s.journal||’’,s.curState||’’)){
-    txt.textContent=’That anger makes sense — and you don’t have to soften it here. Carrying this is exhausting. When everything feels raw like this, that’s often your system under strain talking, not a flaw in you. I’m not going anywhere.\n\nAnger like this is energy — it usually means something matters to you. When you’re ready, that energy can point you toward what you want to be different.’;
+  if(matchAnger(s.journal||'',s.curState||'')){
+    txt.textContent='That anger makes sense — and you don’t have to soften it here. Carrying this is exhausting. When everything feels raw like this, that’s often your system under strain talking, not a flaw in you. I’m not going anywhere.\n\nAnger like this is energy — it usually means something matters to you. When you’re ready, that energy can point you toward what you want to be different.';
     offer.hidden=true;
     def.hidden=true;
     /* render anger-specific choices */
-    let ac=document.getElementById(‘anger-choices’);
+    let ac=document.getElementById('anger-choices');
     if(!ac){
-      ac=document.createElement(‘div’);ac.id=’anger-choices’;
+      ac=document.createElement('div');ac.id='anger-choices';
       def.parentNode.insertBefore(ac,def.nextSibling);
     }
-    ac.innerHTML=’’;
+    ac.innerHTML='';
     /* hide MI panel if it was open from a prior visit */
-    const oldMi=document.getElementById(‘anger-mi-panel’);if(oldMi)oldMi.remove();
+    const oldMi=document.getElementById('anger-mi-panel');if(oldMi)oldMi.remove();
     /* choice (a) */
-    const btnA=document.createElement(‘button’);btnA.className=’btn btn-secondary’;
-    btnA.textContent=’I just needed to say that’;
-    btnA.addEventListener(‘click’,()=>{
-      txt.textContent=’Said. That took something. I’m still right here whenever you come back.’;
-      ac.innerHTML=’’;
-      const backBtn=document.createElement(‘button’);backBtn.className=’btn btn-ghost’;
-      backBtn.textContent=’Back to the hub’;backBtn.setAttribute(‘data-go’,’hub’);
-      backBtn.addEventListener(‘click’,()=>{captureInputs();show(‘hub’)});
+    const btnA=document.createElement('button');btnA.className='btn btn-secondary';
+    btnA.textContent='I just needed to say that';
+    btnA.addEventListener('click',()=>{
+      txt.textContent='Said. That took something. I’m still right here whenever you come back.';
+      ac.innerHTML='';
+      const backBtn=document.createElement('button');backBtn.className='btn btn-ghost';
+      backBtn.textContent='Back to the hub';backBtn.setAttribute('data-go','hub');
+      backBtn.addEventListener('click',()=>{captureInputs();show('hub')});
       ac.appendChild(backBtn);
-      const sl=document.getElementById(‘anger-safety’);if(sl)sl.style.display=’’;
+      const sl=document.getElementById('anger-safety');if(sl)sl.style.display='';
     });
     ac.appendChild(btnA);
     /* choice (b) */
-    const btnB=document.createElement(‘button’);btnB.className=’btn btn-secondary’;
-    btnB.textContent=’Help me find a next step’;
-    btnB.addEventListener(‘click’,()=>{captureInputs();show(‘resources’)});
+    const btnB=document.createElement('button');btnB.className='btn btn-secondary';
+    btnB.textContent='Help me find a next step';
+    btnB.addEventListener('click',()=>{captureInputs();show('resources')});
     ac.appendChild(btnB);
     /* choice (c) */
-    const btnC=document.createElement(‘button’);btnC.className=’btn btn-primary’;
-    btnC.textContent=’I want to talk to a person’;
-    btnC.addEventListener(‘click’,()=>{captureInputs();show(‘ready’)});
+    const btnC=document.createElement('button');btnC.className='btn btn-primary';
+    btnC.textContent='I want to talk to a person';
+    btnC.addEventListener('click',()=>{captureInputs();show('ready')});
     ac.appendChild(btnC);
     /* choice (d) — MI evocative / "What’s underneath it?" */
-    const btnD=document.createElement(‘button’);btnD.className=’btn btn-secondary’;
-    btnD.textContent=’What’s underneath it?’;
-    btnD.addEventListener(‘click’,()=>{
+    const btnD=document.createElement('button');btnD.className='btn btn-secondary';
+    btnD.textContent='What’s underneath it?';
+    btnD.addEventListener('click',()=>{
       /* hide the choice buttons while the MI panel is open */
-      ac.style.display=’none’;
-      const sl=document.getElementById(‘anger-safety’);if(sl)sl.style.display=’none’;
+      ac.style.display='none';
+      const sl=document.getElementById('anger-safety');if(sl)sl.style.display='none';
       /* build MI panel */
-      let mi=document.getElementById(‘anger-mi-panel’);
+      let mi=document.getElementById('anger-mi-panel');
       if(!mi){
-        mi=document.createElement(‘div’);mi.id=’anger-mi-panel’;
-        mi.style.cssText=’animation:fade .35s ease’;
+        mi=document.createElement('div');mi.id='anger-mi-panel';
+        mi.style.cssText='animation:fade .35s ease';
         /* insert right after the reflect-box */
-        const box=document.getElementById(‘reflect-box’);
+        const box=document.getElementById('reflect-box');
         box.parentNode.insertBefore(mi,box.nextSibling);
       }
-      mi.innerHTML=’’;
-      const miCard=document.createElement(‘div’);miCard.className=’reflect’;
-      miCard.style.cssText=’margin-top:8px’;
+      mi.innerHTML='';
+      const miCard=document.createElement('div');miCard.className='reflect';
+      miCard.style.cssText='margin-top:8px';
       miCard.innerHTML=
-        ‘<p style="margin:0 0 10px;color:#cfe6d8;font-size:16px;line-height:1.55">’+
-        ‘No rush. If you want to: <strong>what is the anger pointing at?</strong></p>’+
-        ‘<p style="margin:0 0 10px;color:#cfe6d8;font-size:16px;line-height:1.55">’+
-        ‘What would you want to be different — even a little?</p>’;
+        '<p style="margin:0 0 10px;color:#cfe6d8;font-size:16px;line-height:1.55">'+
+        'No rush. If you want to: <strong>what is the anger pointing at?</strong></p>'+
+        '<p style="margin:0 0 10px;color:#cfe6d8;font-size:16px;line-height:1.55">'+
+        'What would you want to be different — even a little?</p>';
       mi.appendChild(miCard);
-      const miHint=document.createElement(‘p’);miHint.className=’input-hint’;
-      miHint.textContent=’You don’t have to answer. If it helps to write, it stays only on this phone.’;
+      const miHint=document.createElement('p');miHint.className='input-hint';
+      miHint.textContent='You don’t have to answer. If it helps to write, it stays only on this phone.';
       mi.appendChild(miHint);
-      const miTa=document.createElement(‘textarea’);miTa.id=’anger-mi-text’;
-      miTa.placeholder=’Whatever’s true for you right now.’;
-      miTa.style.cssText=’margin-bottom:10px’;
+      const miTa=document.createElement('textarea');miTa.id='anger-mi-text';
+      miTa.placeholder='Whatever’s true for you right now.';
+      miTa.style.cssText='margin-bottom:10px';
       /* restore any previously typed reflection */
       const saved=loadState();if(saved.angerMiText)miTa.value=saved.angerMiText;
-      miTa.addEventListener(‘input’,()=>{saveState({angerMiText:miTa.value})});
+      miTa.addEventListener('input',()=>{saveState({angerMiText:miTa.value})});
       mi.appendChild(miTa);
-      const miBack=document.createElement(‘button’);miBack.className=’btn btn-ghost’;
-      miBack.textContent=’I’m good for now’;
-      miBack.addEventListener(‘click’,()=>{
+      const miBack=document.createElement('button');miBack.className='btn btn-ghost';
+      miBack.textContent='I’m good for now';
+      miBack.addEventListener('click',()=>{
         mi.remove();
-        ac.style.display=’’;
-        const slr=document.getElementById(‘anger-safety’);if(slr)slr.style.display=’’;
-        show(‘hub’);
+        ac.style.display='';
+        const slr=document.getElementById('anger-safety');if(slr)slr.style.display='';
+        show('hub');
       });
       mi.appendChild(miBack);
     });
     ac.appendChild(btnD);
     /* persistent safety line */
-    let sl=document.getElementById(‘anger-safety’);
+    let sl=document.getElementById('anger-safety');
     if(!sl){
-      sl=document.createElement(‘p’);sl.id=’anger-safety’;sl.className=’muted’;
-      sl.style.cssText=’margin-top:12px;font-size:13px;line-height:1.5’;
-      sl.textContent=’If the anger ever turns toward hurting yourself or someone else, you can reach a real person right now — call or text 988.’;
+      sl=document.createElement('p');sl.id='anger-safety';sl.className='muted';
+      sl.style.cssText='margin-top:12px;font-size:13px;line-height:1.5';
+      sl.textContent='If the anger ever turns toward hurting yourself or someone else, you can reach a real person right now — call or text 988.';
       ac.parentNode.insertBefore(sl,ac.nextSibling);
     }
-    sl.style.display=’’;
+    sl.style.display='';
     return;
   }
 
   /* hide anger UI if we re-enter reflect in a non-anger state */
-  const ac=document.getElementById(‘anger-choices’);if(ac)ac.innerHTML=’’;
-  const sl=document.getElementById(‘anger-safety’);if(sl)sl.style.display=’none’;
+  const ac=document.getElementById('anger-choices');if(ac)ac.innerHTML='';
+  const sl=document.getElementById('anger-safety');if(sl)sl.style.display='none';
 
   const lines=[];
-  lines.push(‘You showed up and put something down. That counts — more than it feels like right now.’);
-  if(s.curState===’influence’)lines.push(‘You said you’re not sober right now, and you came here anyway. That takes something.’);
-  if(s.curState===’okay’)lines.push(‘You said you’re actually okay. Good. Worth noticing the steady moments too.’);
+  lines.push('You showed up and put something down. That counts — more than it feels like right now.');
+  if(s.curState==='influence')lines.push('You said you’re not sober right now, and you came here anyway. That takes something.');
+  if(s.curState==='okay')lines.push('You said you’re actually okay. Good. Worth noticing the steady moments too.');
   if(s.values&&s.values.length){
     const v=s.values[0].toLowerCase();
-    lines.push(‘Earlier you said ‘+v+’ matters to you. That’s still true, even on a heavy day. Especially on a heavy day.’);
+    lines.push('Earlier you said '+v+' matters to you. That’s still true, even on a heavy day. Especially on a heavy day.');
   }
-  if(typeof s.motivation===’number’){
-    if(s.motivation<=3)lines.push(‘Things feel heavy right now. You don’t have to carry the whole thing — just the next small piece.’);
-    else if(s.motivation>=8)lines.push(‘Something feels a little steadier. If part of you is ready, that part gets to lead.’);
+  if(typeof s.motivation==='number'){
+    if(s.motivation<=3)lines.push('Things feel heavy right now. You don’t have to carry the whole thing — just the next small piece.');
+    else if(s.motivation>=8)lines.push('Something feels a little steadier. If part of you is ready, that part gets to lead.');
   }
-  txt.textContent=lines.join(‘ ‘);
+  txt.textContent=lines.join(' ');
 
   /* reactive psychoeducation — only OFFER, never push (Sue: ask before advising) */
-  const nug=matchNugget(s.journal||’’);
-  if(nug){document.getElementById(‘nugget-q’).textContent=nug.q;offer.hidden=false;def.hidden=false;
-    document.getElementById(‘nugget-yes’).onclick=()=>{showNugget(nug)};saveState({pendingNugget:nug.title});}
+  const nug=matchNugget(s.journal||'');
+  if(nug){document.getElementById('nugget-q').textContent=nug.q;offer.hidden=false;def.hidden=false;
+    document.getElementById('nugget-yes').onclick=()=>{showNugget(nug)};saveState({pendingNugget:nug.title});}
   else{offer.hidden=true;def.hidden=false;}
 }
-function matchNugget(text){const t=(text||’’).toLowerCase();return NUGGETS.find(n=>n.keys.some(k=>t.includes(k)))||null;}
+function matchNugget(text){const t=(text||'').toLowerCase();return NUGGETS.find(n=>n.keys.some(k=>t.includes(k)))||null;}
 function showNugget(n){document.getElementById('nugget-title').textContent=n.title;
   document.getElementById('nugget-body').textContent=n.body;show('nugget');}
 
