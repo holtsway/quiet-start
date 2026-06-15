@@ -340,6 +340,7 @@
 
 <footer>If you are in immediate danger, call <a href="tel:911">911</a> or <a href="tel:988">988</a>.<br><span class="muted" style="display:block;margin-top:6px">This isn't therapy or a diagnosis — just a private place to start.</span></footer>
 
+<script src="companion_engine.js"></script>
 <script>
 /* ---------------------------------------------------------------------------
    The Bridge — v0.3
@@ -473,9 +474,9 @@ const ANGER_WORDS=['angry','anger','pissed','furious','rage','raging','fed up','
   'no one listens','nobody listens','nobody cares','bullshit','useless','pointless',
   'screw this','screw it','give up',"can't do this",'fuck','f*ck','hate this','hate everything'];
 function matchAnger(text,state){
-  if(state==='angry')return true;
-  const t=(text||'').toLowerCase();
-  return ANGER_WORDS.some(w=>t.includes(w));
+  if(state==='angry')return true; /* user explicitly tapped the "Angry / fed up" chip */
+  if(window.BridgeEngine&&BridgeEngine.detectEmotion){const e=BridgeEngine.detectEmotion(text,[]);return !!(e&&e.key==='anger');}
+  return false; /* negation-aware: "not angry" no longer false-fires */
 }
 
 /* ---- reflection (deterministic, unconditional positive regard, ask-before-advise) ---- */
@@ -667,88 +668,14 @@ resetBtn.addEventListener('click',()=>{if(confirm('Clear everything saved here?'
 -------------------------------------------------------------------------- */
 const DEFAULT_COMPANION_NAME='Companion';
 function companionName(){return loadState().companionName||DEFAULT_COMPANION_NAME;}
-function pick(a){return a[Math.floor(Math.random()*a.length)];}
 function focusChat(){const t=document.getElementById('chat-text');if(t)t.focus();}
 
-/* crisis: DETERMINISTIC. keyword -> fixed safety response + human escalation. */
-const CRISIS_WORDS=['kill myself','killing myself','suicide','suicidal','end it all','end my life',
-  'better off dead','want to die','wanna die','take my life','no reason to live','not worth living',
-  "don't want to be here","dont want to be here",'hurt myself','hurting myself','kill me'];
-function matchCrisis(t){t=(t||'').toLowerCase();return CRISIS_WORDS.some(w=>t.includes(w));}
-const HOPELESS_RE=/\b(hopeless|no point|what'?s the point|give up|giving up|nothing matters|can'?t go on|cant go on|done trying|no way out|what'?s the use|whats the use)\b/;
-
-const THEMES=[
- {re:/\b(alone|lonely|by myself|no one|nobody|isolated|on my own)\b/,
-  reply:['Being alone with all of this is one of the hardest parts.','Loneliness makes everything louder. You reached out, though — that counts for something.'],
-  q:['Who in your life feels even a little safe to be near?','When did you last feel less alone, even for a moment?']},
- {re:/\b(tired|exhausted|no energy|drained|burnt out|burned out|can'?t sleep|cant sleep|insomnia)\b/,
-  reply:['That kind of tired goes deeper than sleep sometimes.','Running on empty makes everything heavier than it should be.'],
-  q:['What has been keeping you up, if you know?','What would real rest even look like for you?']},
- {re:/\b(ashamed|shame|guilty|guilt|embarrassed|hate myself|failure|worthless|disgusting|stupid)\b/,
-  reply:['Shame is heavy, and it lies — it says you ARE the problem instead of someone going through one.','You are being really hard on yourself. I am not here to judge any of it.'],
-  q:['Would you talk to a friend the way you are talking about yourself?','What would it feel like to set that judgment down for a minute?']},
- {re:/\b(scared|afraid|anxious|anxiety|panic|panicking|worried|nervous|terrified|on edge)\b/,
-  reply:['Fear like that is exhausting to carry.','It makes sense to feel scared — this stuff is big.'],
-  q:['What feels like the scariest part right now?','Is there one small thing that would make today feel a little safer?']},
- {re:/\b(family|kids|son|daughter|wife|husband|mom|dad|mother|father|partner|girlfriend|boyfriend|brother|sister|friend)\b/,
-  reply:['The people we love are usually tangled up in all of this.','It sounds like someone really matters in this.'],
-  q:['What do you wish they understood?','What kind of relationship do you want with them?']},
- {re:/\b(money|job|work|rent|broke|bills|homeless|eviction|fired|unemployed|nowhere to)\b/,
-  reply:['That is a lot of real-world weight on top of everything else.','When the basics feel shaky, it is hard to think about anything else.'],
-  q:['What is the most pressing thing today?','Would it help to see what is around you for that?']},
- {re:/\b(relapse|relapsed|used again|slipped|drank again|got high|using again|craving|cravings|crave|withdrawal|withdrawals)\b/,
-  reply:['Thank you for being straight with me — that takes guts.','A slip is not the end of the road, and it does not erase the effort behind you.'],
-  q:['What was going on right before?','What do you want to do from here — there is no wrong answer?']},
- {re:/\b(better|good|okay|fine|hopeful|proud|grateful|clean|sober|progress|made it)\b/,
-  reply:['I am really glad to hear that. Steady moments deserve to be noticed too.','That is worth holding onto. You did that.'],
-  q:['What helped today go a little better?','What would help that stick?']}
-];
-const OPEN_QS=['What is weighing on you most right now?','What made today feel the way it did?',
-  'If one thing could feel a little lighter, what would it be?','What do you need most in this moment?',
-  'What is going on underneath that, if you had to guess?'];
-
+/* All decision logic — deterministic crisis override, negation/correction-acceptance,
+   no-repeat emotion labeling, symptom/danger lane, themes — lives in companion_engine.js
+   (window.BridgeEngine), covered by companion_engine.test.js. The UI below only renders. */
 const STARTER_CHIPS=[{say:"I'm not sure where to start"},{say:"Today's been rough"},
   {say:"I just need to vent"},{say:"I'm worried about my using"},{say:"Actually, I'm okay"}];
 const DEFAULT_CHIPS=[{label:'Talk to a real person',go:'ready'},{label:'Find help near me',go:'resources'},{label:'Just keep talking',act:focusChat}];
-
-/* only the substance nuggets (alcohol/opioids/stimulants) carry safety value worth
-   surfacing mid-conversation; sleep/alone overlap with THEMES, which reflect first. */
-function matchSafetyNugget(text){const t=(text||'').toLowerCase();
-  for(let i=0;i<3;i++){if(NUGGETS[i].keys.some(k=>t.includes(k)))return NUGGETS[i];}return null;}
-function companionReply(text){
-  const t=(text||'').toLowerCase();const s=loadState();
-  const out={bubbles:[],chips:null,talk:false,crisis:false};
-  if(matchCrisis(t)){
-    out.crisis=true;out.talk=true;
-    out.bubbles.push('I am really glad you told me that. What you are feeling matters, and you deserve to talk to a real person right now — not a screen. Someone is there any time, day or night.');
-    return out;
-  }
-  if(HOPELESS_RE.test(t)){
-    out.talk=true;
-    out.bubbles.push('That sounds so heavy — like you have been carrying it a long while. Feeling out of options is real, and it does not mean there are none.');
-    out.bubbles.push('You do not have to sort it out alone. Would it help to hear a real voice? The people on the Service Helpline are kind, and they do this every day.');
-    return out;
-  }
-  if(matchAnger(t,s.curState)){
-    out.bubbles.push('That anger makes sense — you do not have to soften it here. Anger usually means something matters to you.');
-    out.bubbles.push(pick(['What is it pointing at?','What is underneath it, if you sit with it a second?']));
-    return out;
-  }
-  const nug=matchSafetyNugget(t);
-  if(nug){
-    out.bubbles.push(pick(['Thank you for being honest about that — it is not easy to say.','I hear you. No judgment here at all.']));
-    out.bubbles.push(nug.q);
-    out.chips=[{label:'Yeah, tell me',act:()=>{chatPush('bot',nug.body);renderChatChips(DEFAULT_CHIPS);}},
-               {label:'Not now',act:()=>renderChatChips(DEFAULT_CHIPS)}];
-    return out;
-  }
-  for(let i=0;i<THEMES.length;i++){
-    if(THEMES[i].re.test(t)){out.bubbles.push(pick(THEMES[i].reply));out.bubbles.push(pick(THEMES[i].q));return out;}
-  }
-  out.bubbles.push(pick(['I am listening.','I am here — take your time.','Thank you for telling me that.']));
-  out.bubbles.push(pick(OPEN_QS));
-  return out;
-}
 
 function chatAppend(role,text){
   const log=document.getElementById('chat-log');if(!log)return;
@@ -785,10 +712,29 @@ function handleUser(text){
   chatPush('me',text);
   const ch=document.getElementById('chat-chips');if(ch)ch.innerHTML='';
   const ca=document.getElementById('chat-actions');if(ca)ca.innerHTML='';
-  const r=companionReply(text);
+  const s=loadState();
+  const ctx={namedEmotions:s.companionNamedEmotions||[],suppressedEmotions:s.companionSuppressed||[]};
+  const r=BridgeEngine.companionReply(text,ctx);
+  /* session memory: never re-label an emotion, and after a correction suppress it for good */
+  if(r.correction){
+    const supp=[...new Set([...(ctx.suppressedEmotions),...(r.suppressAdd||[])])];
+    saveState({companionNamedEmotions:[],companionSuppressed:supp});
+  }else if(r.emotion&&!r.repeat){
+    saveState({companionNamedEmotions:[...new Set([...ctx.namedEmotions,r.emotion])]});
+  }
   let delay=350;
   r.bubbles.forEach(b=>{setTimeout(()=>chatPush('bot',b),delay);delay+=540;});
-  setTimeout(()=>{if(r.talk)renderTalkButtons(r.crisis);renderChatChips(r.chips||DEFAULT_CHIPS);incTurn();},delay);
+  setTimeout(()=>{
+    if(r.offerNugget){
+      chatPush('bot',r.offerNugget.q);
+      renderChatChips([{label:'Yeah, tell me',act:()=>{chatPush('bot',r.offerNugget.body);renderChatChips(DEFAULT_CHIPS);}},
+                       {label:'Not now',act:()=>renderChatChips(DEFAULT_CHIPS)}]);
+    }else{
+      if(r.talk)renderTalkButtons(r.crisis);
+      renderChatChips(DEFAULT_CHIPS);
+    }
+    incTurn();
+  },delay);
 }
 function chatSend(){const ta=document.getElementById('chat-text');if(!ta)return;const v=ta.value;ta.value='';ta.style.height='';handleUser(v);}
 
