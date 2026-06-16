@@ -74,6 +74,18 @@
   #gate input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:14px;font:inherit;text-align:center;letter-spacing:.08em;margin-bottom:12px}
   #gate button{width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:14px;font:inherit;font-weight:600;cursor:pointer}
   #gate .err{color:#e98b8b;font-size:13px;height:16px;margin-top:8px}
+  .sc-toggle{display:flex;gap:8px;margin:16px 0 6px}
+  .sc-btn{flex:1;background:var(--panel);border:1px solid var(--border);color:var(--soft);border-radius:11px;padding:12px;font:inherit;font-size:14.5px;font-weight:600;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .sc-btn.active[data-mode="today"]{border-color:#7a3b46;color:#f0c9cf;background:#22151a}
+  .sc-btn.active[data-mode="coherent"]{border-color:var(--greenline);color:#bfe8d2;background:var(--greenbg)}
+  .sc-step{display:flex;gap:14px;align-items:flex-start;border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:10px 0;background:var(--panel);animation:fade .25s ease}
+  .sc-step.today{border-left:3px solid #9c4b57}
+  .sc-step.coherent{border-left:3px solid var(--green)}
+  .sc-n{width:26px;height:26px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;background:var(--panel2);color:var(--mute)}
+  .sc-step.coherent .sc-n{background:var(--greenbg);color:#5fae84}
+  .sc-t{font-weight:600;font-size:15px;margin-bottom:3px}
+  .sc-d{font-size:14.5px;color:var(--soft)}
+  @keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
   @media(max-width:620px){
     .hero h1{font-size:34px}.hero p.lead{font-size:18px}section h2{font-size:25px}
     .stat-row{grid-template-columns:1fr;gap:10px}.vids{grid-template-columns:1fr}
@@ -132,12 +144,27 @@
     <p>The system doesn't fail for lack of clever parts. It fails because the parts don't cohere — each is optimized in isolation while the whole loses people. The same failure repeats at every level: the person's brief window of readiness, the helpline agent, the clinician, the data team — a scarce, irreplaceable human consumed by grind a machine should carry.</p>
     <div class="reflect"><p>We build a layer that takes that grind off the human and measures whether <b>everyone</b> is better off — patient, agent, clinician, analyst. We call it <b>Key Coherence Indicators (KCI)</b>. Its defining property: <i>you cannot raise the score by making any one stakeholder worse off.</i></p></div>
     <p><b>This is also how we keep the AI aligned.</b> KCI doesn't just measure the system — it points the technology at the people it's meant to serve. Because the only way the score rises is everyone being better off, the AI can't optimize for clicks, throughput, or any proxy at a stakeholder's expense. The same rule keeps the human and the machine focused on the same thing: the patient — not the metric.</p>
+    <p>It also keeps the whole system tied to its <b>stated mission</b> — so front-line reality and leadership intent stay connected, and the right call becomes the obvious one.</p>
     <details class="more"><summary>How KCI works, briefly</summary>
       <div class="mbody">
         <p>Most systems measure parts — beds filled, calls closed, dollars spent — and the parts quietly compete. KCI measures the <i>whole</i>: is information flowing without friction, is the time from reach-out to care shrinking, is anyone being left behind? It's a single score with an anti-extraction property baked into the math — a gain that comes at another stakeholder's expense lowers the total. (Subject of a provisional patent filed 2026-03-24.)</p>
         <p>We don't sell AI — anyone can claim AI. We sell <b>coherent implementation</b>: making it actually work inside a real system. That's the hard part, and it's our part.</p>
       </div>
     </details>
+  </div>
+</section>
+
+<section id="scenario">
+  <div class="wrap">
+    <div class="kick">A scenario you'll recognize</div>
+    <h2>Watch a change move through the system.</h2>
+    <p>A change is decided at the top, and it has to ripple across teams whose workflows depend on each other. Flip between how that tends to go — and how it goes with a coherence layer.</p>
+    <div class="sc-toggle">
+      <button class="sc-btn active" data-mode="today" type="button">How it goes today</button>
+      <button class="sc-btn" data-mode="coherent" type="button">With a coherence layer</button>
+    </div>
+    <div id="sc-steps"></div>
+    <p class="note" id="sc-close"></p>
   </div>
 </section>
 
@@ -226,8 +253,8 @@
     <h2>The same idea, across the system.</h2>
     <p>The Bridge is the first of these — the same move (a specialized agent that gives a scarce human their time back) fits everywhere the system loses people:</p>
     <ul class="clean">
+      <li><b>Teams kept aligned</b> — when a change ripples across units, it too often reaches the people who must execute it late, creating rushed turnarounds and friction. A coherence layer keeps everyone working from one current picture — and gives leadership an <b>accurate, real-time read on how the system is functioning</b>.</li>
       <li><b>Connection data, kept true</b> — bed/provider availability stays current and feeds the network picture instead of fighting it.</li>
-      <li><b>Teams kept aligned</b> — when an operational change ripples across units, it too often reaches the people who must execute it late, creating rushed turnarounds and avoidable friction. A coherence layer keeps everyone working from one current picture.</li>
       <li><b>Provider communication</b> — keep policy, guidance, and support coherent between the county and its providers.</li>
       <li><b>Analytics, freed</b> — let the data team use the data to improve the system, instead of wrangling it.</li>
     </ul>
@@ -253,9 +280,11 @@
   <div class="wrap">
     <div class="kick">The ask</div>
     <h2>Sixty days. No risk to your systems.</h2>
+    <p>Start where the push already is: <b>better, real-time data on whether R95 is reaching the 95%</b> — without new systems or new hires.</p>
     <ul class="clean">
       <li>A patient-facing pilot only — <b>no PHI, no procurement, nothing touching county systems.</b></li>
-      <li>Measured against the system's own metrics — the goal: <b>more people connecting to care</b>, plus capacity relief for the team.</li>
+      <li><b>Built to multiply the staff you have.</b> Hiring is frozen and people are stretched — this gives time back, it doesn't add headcount.</li>
+      <li>Measured against the system's own metrics — more people connecting to care, and an honest read on whether it moved.</li>
       <li>A clean go / expand / stop at 60 days. If it doesn't move, we shut it down with nothing lost.</li>
     </ul>
   </div>
@@ -303,6 +332,32 @@ var ACCESS_CODE = "r95";          /* soft gate (friction + privacy only; NOT sec
   document.getElementById("gate-go").addEventListener("click",tryCode);
   input.addEventListener("keydown",function(e){if(e.key==="Enter")tryCode();});
   input.focus();
+})();
+
+/* ---- interactive scenario (today vs. coherence) ---- */
+var SCENARIO = [
+  { t: "A change is decided", today: "A new requirement is set at the leadership level. It's clear to the people in that room.", coherent: "The same decision is captured once, in a shared picture every affected team can see." },
+  { t: "It has to reach other teams", today: "It surfaces in scattered meetings and email threads — some teams hear it late, some not at all.", coherent: "Each team is shown what changed, what it means for their workflow, and what's now expected of them." },
+  { t: "Teams try to implement", today: "With partial context and a short runway, work gets done inconsistently — or in ways that cause downstream errors.", coherent: "Action items, owners, and deadlines live in one place; gaps and conflicts surface before they bite." },
+  { t: "The result", today: "Friction between teams, rework, and a system that can't get an accurate read on itself.", coherent: "Aligned execution, far less rework, and a clean, current read on how the system is actually functioning." }
+];
+var SC_CLOSE = { today: "Multiply this across a department where hiring is frozen and people are stretched — the cost compounds fast.", coherent: "Same people, same constraints — just coherent. That's the whole idea." };
+function renderScenario(mode){
+  var wrap=document.getElementById("sc-steps"); if(!wrap)return; wrap.innerHTML="";
+  SCENARIO.forEach(function(s,i){
+    var d=document.createElement("div"); d.className="sc-step "+mode;
+    d.innerHTML='<div class="sc-n">'+(i+1)+'</div><div><div class="sc-t">'+s.t+'</div><div class="sc-d">'+s[mode]+'</div></div>';
+    wrap.appendChild(d);
+  });
+  var c=document.getElementById("sc-close"); if(c)c.textContent=SC_CLOSE[mode];
+}
+(function(){
+  var btns=document.querySelectorAll(".sc-btn"); if(!btns.length)return;
+  btns.forEach(function(b){ b.addEventListener("click",function(){
+    btns.forEach(function(x){x.classList.remove("active");}); b.classList.add("active");
+    renderScenario(b.getAttribute("data-mode"));
+  });});
+  renderScenario("today");
 })();
 
 var VIDEOS = [
