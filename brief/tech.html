@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex,nofollow" />
+<title>The Bridge — Architecture &amp; Security (Technical)</title>
+<meta name="theme-color" content="#0E1116" />
+<style>
+  :root{--bg:#0E1116;--panel:#161C25;--panel2:#121a24;--border:#232C38;--blue:#3A8BFF;--green:#2BB673;
+        --text:#E8EEF5;--mute:#8A96A5;--dim:#6F7A88;--soft:#cdd6e1;--greenline:#234634;--greenbg:#15211B;}
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+  .wrap{max-width:820px;margin:0 auto;padding:0 22px}
+  a{color:var(--blue)}
+  .kick{font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);font-weight:700;margin:0 0 12px}
+  header.hero{padding:48px 0 28px;border-bottom:1px solid var(--border)}
+  .hero h1{font-size:38px;line-height:1.06;margin:0 0 12px}
+  .hero p{color:var(--mute);max-width:640px;margin:0}
+  .back{display:inline-block;color:var(--mute);text-decoration:none;font-size:14px;margin-bottom:22px}
+  section{padding:34px 0;border-bottom:1px solid var(--border)}
+  section h2{font-size:24px;margin:0 0 14px}
+  section h3{font-size:16px;margin:18px 0 6px;color:var(--text)}
+  section p{color:var(--soft);margin:0 0 14px}
+  ul{margin:10px 0 14px;padding-left:20px}
+  li{color:var(--soft);margin:7px 0}
+  code{background:var(--panel2);border:1px solid var(--border);border-radius:6px;padding:1px 6px;font-size:13.5px;color:#cfe6d8}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.04em;border-radius:6px;padding:2px 8px;margin-left:6px;vertical-align:middle}
+  .tag.live{background:#15211B;border:1px solid var(--greenline);color:#5fae84}
+  .tag.des{background:#1b2230;border:1px solid var(--border);color:#8aa4c8}
+  .card{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:16px 18px;margin:12px 0}
+  .card p{margin:0;font-size:14.5px;color:var(--mute)}
+  footer{padding:30px 0 56px;color:var(--dim);font-size:13px;text-align:center}
+  #gate{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;align-items:center;justify-content:center;padding:24px}
+  #gate[hidden]{display:none}
+  #gate .box{max-width:380px;width:100%;text-align:center}
+  #gate input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:14px;font:inherit;text-align:center;letter-spacing:.08em;margin:12px 0}
+  #gate button{width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:14px;font:inherit;font-weight:600;cursor:pointer}
+  #gate .err{color:#e98b8b;font-size:13px;height:16px;margin-top:8px}
+</style>
+</head>
+<body>
+
+<div id="gate" hidden>
+  <div class="box">
+    <div class="kick">Coherence Systems</div>
+    <h1 class="serif" style="font-size:26px">Technical overview</h1>
+    <input id="gate-input" type="text" autocomplete="off" placeholder="access code" aria-label="access code" />
+    <button id="gate-go" type="button">Enter</button>
+    <div class="err" id="gate-err"></div>
+  </div>
+</div>
+
+<header class="hero">
+  <div class="wrap">
+    <a class="back" href="index.html">← back to the overview</a>
+    <div class="kick">For the technical team</div>
+    <h1>Architecture &amp; security.</h1>
+    <p>How the Bridge actually works — the data model, the safety design, the AI guardrails, and the regulatory posture. Honest markers throughout: <span class="tag live">LIVE</span> = shipped today, <span class="tag des">DESIGNED</span> = specified, not yet built.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="kick">Data model</div>
+    <h2>Local-first. Nothing leaves the device by default. <span class="tag live">LIVE</span></h2>
+    <p>The Bridge is a static, self-contained web app (installable as a PWA). All user input — check-ins, journal, the companion conversation — is held in the browser's <code>localStorage</code> on the user's own device. There is no account, no login, no server-side user store, and <b>no telemetry in the live build</b> — which is why "nothing leaves the phone" is literally true right now, not a policy promise.</p>
+    <h3>Reach measurement, when it's switched on <span class="tag des">DESIGNED</span></h3>
+    <ul>
+      <li>A first-party endpoint receives <b>non-identifying counts only</b> — a small set of anonymous funnel events (landed → motivation-check → save-point → resource-viewed → helpline-call-initiated). No names, no free text, no identifiers.</li>
+      <li>Privacy rails ship <i>with</i> the collector: <b>small-cell suppression</b> and <b>no geo×time joins</b> (so a coarse area + an exact timestamp can never re-identify a person in a thin population).</li>
+      <li>Attribution to the county's outcome is done with a spoken <b>"the Bridge sent me"</b> code + a source-of-referral field — never a tracking number. Undercount biases conservative; attribution is a floor.</li>
+      <li>Build sequence: <b>dark in Phase 0</b> (schema + no-op hooks + synthetic events, zero real telemetry) → live first-party collector at Phase 1.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kick">The companion</div>
+    <h2>Deterministic Safe Mode, with a real crisis override. <span class="tag live">LIVE</span></h2>
+    <p>The default companion is a pure, deterministic engine (<code>companion_engine.js</code>) — no network call, no LLM, nothing transmitted. Its behavior is the safety contract:</p>
+    <ul>
+      <li><b>Crisis is never AI-judged.</b> A fixed keyword scan routes any sign of danger to 988 / 911 / the Service Helpline. Deterministic, always.</li>
+      <li><b>Correction-acceptance + no-repeat labeling.</b> Negation-aware, word-boundary detection: if a user denies a feeling, the engine apologizes, stops, and suppresses that label for the session. It never insists on a rejected interpretation.</li>
+      <li><b>No diagnosis.</b> Symptom/danger input gets supportive routing to a human — never an assessment, severity call, or dose.</li>
+      <li><b>Regression-gated.</b> A 22-case test suite (<code>companion_engine.test.js</code>), seeded by real clinical feedback, runs as a commit gate so these guarantees can't silently regress.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kick">The AI</div>
+    <h2>Tiered, with the same guardrails at every level.</h2>
+    <ul>
+      <li><b>Tier 0 — Safe Mode</b> <span class="tag live">LIVE</span>: deterministic + local (above).</li>
+      <li><b>Tier 1 — on-device AI</b> <span class="tag des">DESIGNED</span>: Apple Foundation Models on-device in a native build — richer conversation that still never leaves the phone.</li>
+      <li><b>Tier 2 — cloud assist</b> <span class="tag des">DESIGNED</span>: explicit opt-in, no PHI, off by default, not used in the pilot.</li>
+    </ul>
+    <div class="card"><p><b>The invariant across all tiers:</b> the model <i>proposes</i>; the deterministic Safe-Mode layer <i>disposes</i>. Any model output is re-validated — crisis scan on input <i>and</i> output, no-diagnosis/scope lint, correction state honored — before it reaches the user. On any failure it falls back to Tier 0. The worst case is always Tier-0 behavior; the AI can never overrule a safety rule.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kick">Regulatory posture</div>
+    <h2>Wellness/navigation — outside SaMD; Part 2 doesn't attach.</h2>
+    <ul>
+      <li><b>FDA:</b> a wellness/navigation tool — it doesn't diagnose, treat, or score — sitting outside Software-as-a-Medical-Device.</li>
+      <li><b>42 CFR Part 2:</b> the Bridge creates <b>no SUD record</b> — no identity, nothing transmitted — so Part 2 doesn't attach to it. (Final Rule compliance date for covered programs: Feb 16, 2026; we track it.)</li>
+      <li><b>HIPAA / PHI:</b> the no-PHI patient lane and any future provider-facing lane are kept architecturally separate. The provider lane is designed <b>Part 2-aware</b> — consent management as a first-class feature — and would run in a dedicated HIPAA environment with a BAA.</li>
+    </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kick">Measurement</div>
+    <h2>KCI — anti-extraction by construction.</h2>
+    <p>Key Coherence Indicators score the whole system, not isolated parts, with one defining property: the aggregate cannot rise if any stakeholder (patient, agent, clinician, analyst) is made worse off. In the pilot we honestly instrument ~1.5 axes (patient funnel + a non-PHI helpline aggregate proxy); full multi-axis KCI validation is a Phase-2 claim, stated as such. (Provisional patent filed 2026-03-24.)</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kick">Stack &amp; deployment</div>
+    <h2>Boring on purpose. <span class="tag live">LIVE</span></h2>
+    <ul>
+      <li>Static HTML/CSS/JS — no framework, no build step, no database for the patient app. Trivially auditable.</li>
+      <li>Served over HTTPS from a CDN; installable as a PWA (manifest + icons).</li>
+      <li>The internal/partner overview is served behind a real server-side gate (nginx auth on the Coherence Systems site).</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="back" href="index.html">← back to the overview</a><br><br>
+    Coherence Systems · a private technical overview — please don't share publicly.
+  </div>
+</footer>
+
+<script>
+var ACCESS_CODE = "r95";
+(function(){
+  if(!ACCESS_CODE){return;}
+  var gate=document.getElementById("gate");
+  if(sessionStorage.getItem("brief.ok")==="1"){return;}
+  gate.hidden=false; document.body.style.overflow="hidden";
+  var input=document.getElementById("gate-input"), err=document.getElementById("gate-err");
+  function tryCode(){
+    if(input.value.trim().toLowerCase()===ACCESS_CODE.toLowerCase()){
+      sessionStorage.setItem("brief.ok","1"); gate.hidden=true; document.body.style.overflow="";
+    }else{ err.textContent="That code didn't match. Try again."; }
+  }
+  document.getElementById("gate-go").addEventListener("click",tryCode);
+  input.addEventListener("keydown",function(e){if(e.key==="Enter")tryCode();});
+  input.focus();
+})();
+</script>
+</body>
+</html>

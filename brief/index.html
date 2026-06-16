@@ -4,7 +4,7 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="robots" content="noindex,nofollow" />
-<title>Reaching the 95%, Measured — A Private Brief</title>
+<title>Reaching the 95%, Measured — Coherence Systems</title>
 <meta name="theme-color" content="#0E1116" />
 <style>
   :root{--bg:#0E1116;--panel:#161C25;--panel2:#121a24;--border:#232C38;--blue:#3A8BFF;--green:#2BB673;
@@ -17,20 +17,18 @@
   .wrap{max-width:860px;margin:0 auto;padding:0 22px}
   a{color:var(--text)}
   .kick{font-size:12.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);font-weight:700;margin:0 0 14px}
-  /* hero */
   header.hero{padding:64px 0 40px;position:relative;overflow:hidden;border-bottom:1px solid var(--border)}
   .hero h1{font-size:46px;line-height:1.04;font-weight:700;margin:0 0 18px;letter-spacing:-0.01em}
   .hero p.lead{font-size:20px;color:var(--mute);max-width:640px;margin:0 0 26px;line-height:1.45}
   .prepared{font-size:14px;color:var(--dim);border-top:1px solid var(--border);padding-top:18px;margin-top:8px}
   .prepared b{color:var(--soft)}
   .glow{position:absolute;border-radius:50%;filter:blur(8px);opacity:.10;pointer-events:none}
-  /* sections */
-  section{padding:48px 0;border-bottom:1px solid var(--border)}
+  section{padding:46px 0;border-bottom:1px solid var(--border)}
   section h2{font-size:30px;line-height:1.12;margin:0 0 18px;font-weight:700}
   section p{color:var(--soft);margin:0 0 16px}
   .stat-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:22px 0 6px}
   .stat{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:22px 14px;text-align:center}
-  .stat .n{font-family:Georgia,serif;font-size:40px;font-weight:700;color:var(--green)}
+  .stat .n{font-family:Georgia,serif;font-size:38px;font-weight:700;color:var(--green)}
   .stat .n.blue{color:var(--blue)}
   .stat .l{font-size:13.5px;color:var(--soft);margin-top:8px;line-height:1.35}
   .stat .s{font-size:11px;color:var(--dim);margin-top:8px}
@@ -58,18 +56,22 @@
   ul.clean{list-style:none;padding:0;margin:12px 0}
   ul.clean li{padding:9px 0 9px 26px;position:relative;color:var(--soft);font-size:15.5px;border-bottom:1px solid var(--border)}
   ul.clean li::before{content:"";position:absolute;left:4px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--green)}
+  details.more{background:var(--panel);border:1px solid var(--border);border-radius:12px;margin:12px 0;padding:0 18px}
+  details.more>summary{cursor:pointer;padding:15px 0;font-weight:600;color:var(--blue);list-style:none;font-size:15px;outline:none}
+  details.more>summary::-webkit-details-marker{display:none}
+  details.more>summary::before{content:"+  ";color:var(--blue);font-weight:700}
+  details.more[open]>summary::before{content:"\2013  "}
+  details.more .mbody{padding:0 0 16px;color:var(--soft);font-size:15px}
+  details.more .mbody p{font-size:15px;margin:0 0 10px}
   footer{padding:34px 0 60px;color:var(--dim);font-size:13px;text-align:center}
-  /* privacy svg */
   .svgwrap{margin:18px 0;border:1px solid var(--border);border-radius:14px;overflow:hidden;background:var(--bg)}
   .svgwrap svg{display:block;width:100%;height:auto}
-  /* gate */
   #gate{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;align-items:center;justify-content:center;padding:24px}
   #gate[hidden]{display:none}
   #gate .box{max-width:380px;width:100%;text-align:center}
   #gate h1{font-size:28px;margin:0 0 10px}
   #gate p{color:var(--mute);font-size:15px;margin:0 0 18px}
-  #gate input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--text);
-    border-radius:12px;padding:14px;font:inherit;text-align:center;letter-spacing:.08em;margin-bottom:12px}
+  #gate input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:14px;font:inherit;text-align:center;letter-spacing:.08em;margin-bottom:12px}
   #gate button{width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:14px;font:inherit;font-weight:600;cursor:pointer}
   #gate .err{color:#e98b8b;font-size:13px;height:16px;margin-top:8px}
   @media(max-width:620px){
@@ -80,11 +82,10 @@
 </head>
 <body>
 
-<!-- soft access gate (NOT security — friction + privacy only; no PHI lives here) -->
 <div id="gate" hidden>
   <div class="box">
     <div class="kick">Coherence Systems</div>
-    <h1 class="serif">A private brief</h1>
+    <h1 class="serif">A private overview</h1>
     <p>Enter the access code you were given.</p>
     <input id="gate-input" type="text" inputmode="text" autocomplete="off" placeholder="access code" aria-label="access code" />
     <button id="gate-go" type="button">Enter</button>
@@ -96,25 +97,31 @@
   <div class="glow" style="width:420px;height:420px;background:var(--blue);top:-160px;right:-120px"></div>
   <div class="glow" style="width:360px;height:360px;background:var(--green);bottom:-200px;left:-140px"></div>
   <div class="wrap">
-    <div class="kick">Coherence Systems · R95 Pilot</div>
+    <div class="kick">Coherence Systems · R95</div>
     <h1>Reaching the 95%,<br>measured.</h1>
-    <p class="lead">A discreet, no-PHI instrument that reaches the people the system was never designed to reach — and shows, honestly, whether it's working.</p>
+    <p class="lead">A discreet, no-PHI instrument that reaches the people the system was never designed to reach — and shows, honestly, whether it's working. Explore as deep as you like; each section opens further if you want it.</p>
     <a class="btn" href="https://aquietstart.org" target="_blank" rel="noopener">Try the live app →</a>
-    <a class="btn ghost" href="#deck">Why it fits</a>
+    <a class="btn ghost" href="tech.html">Technical details</a>
     <div class="prepared">A private overview from <b>Coherence Systems</b> · for behavioral-health leadership<br>Clinical SME: <b>Dr. Suzanne M. Verreault, Psy.D.</b> · Licensed Clinical Psychologist</div>
   </div>
 </header>
 
 <section>
   <div class="wrap">
-    <div class="kick">The gap, in your numbers</div>
+    <div class="kick">The gap</div>
     <h2>The philosophy is settled. The measurement isn't.</h2>
     <div class="stat-row">
-      <div class="stat"><div class="n">94.7%</div><div class="l">of adults with SUD don't seek care or believe they need it</div><div class="s">SAMHSA NSDUH — adopted by SAPC R95</div></div>
-      <div class="stat"><div class="n">~3,000</div><div class="l">drug-related overdose deaths in LA County (2023)</div><div class="s">LA County DPH, 2024</div></div>
-      <div class="stat"><div class="n blue">~1 in 4</div><div class="l">reach their indicated level of care within 30 days of a screening</div><div class="s">DHCS evaluation</div></div>
+      <div class="stat"><div class="n">81%</div><div class="l">of people with a substance use disorder received no treatment in the past year</div><div class="s">SAMHSA, 2024</div></div>
+      <div class="stat"><div class="n">93%</div><div class="l">of those didn't seek treatment because they didn't think they needed it</div><div class="s">SAMHSA, 2024</div></div>
+      <div class="stat"><div class="n blue">~3,000</div><div class="l">drug-related overdose deaths in LA County in a single year</div><div class="s">LA County DPH</div></div>
     </div>
-    <p class="note">Today's metrics can look excellent while the people the system is built for never arrive. The gap isn't the front door — it's everything after it.</p>
+    <p class="note">These are the people R95 names — the ones who never knock on the door. Today's metrics can look excellent while almost none of them arrive.</p>
+    <details class="more"><summary>What R95 actually asks of a system</summary>
+      <div class="mbody">
+        <p>R95 ("Reaching the 95%") is built on a simple inversion: design for the ~95% who aren't seeking treatment, not just the ~5% who are. In practice that means <b>lowering barriers</b> (disconnecting "readiness" from total abstinence), <b>meeting people where they are</b>, and <b>communicating worth and compassion</b> regardless of where someone is in their change.</p>
+        <p>A low-barrier approach doesn't replace abstinence-based care — it <i>encompasses</i> it. People's goals shift day to day, and the system has to hold them through that rather than expelling and re-admitting them. The hard part has never been the philosophy. It's reaching the 95% and knowing, honestly, whether you did.</p>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -122,10 +129,15 @@
   <div class="wrap">
     <div class="kick">The idea</div>
     <h2>Coherence: take the grind off the human, at every level.</h2>
-    <p>The SUD system doesn't fail for lack of clever parts. It fails because the parts don't cohere — each is optimized in isolation while the whole loses people. The same failure repeats at every level: the person's brief window of readiness, the helpline agent, the clinician, the data team — a scarce, irreplaceable human consumed by grind a machine should carry.</p>
-    <div class="reflect"><p>We build a layer that takes that grind off the human and measures whether <b>everyone</b> is better off — patient, agent, clinician, analyst. We call it <b>Key Coherence Indicators (KCI)</b>. Its defining property: <i>you cannot raise the score by making any one stakeholder worse off.</i> (Provisional patent filed 2026-03-24.)</p></div>
-    <p><b>This is also how we keep the AI aligned.</b> KCI doesn't just measure the system — it points the technology at the people it's meant to serve. Because the only way the score rises is everyone being better off, the AI can't optimize for clicks, throughput, or any proxy at a stakeholder's expense. The same rule keeps the human and the machine focused on the same thing: the patient, the agent, the clinician — not the metric.</p>
-    <p>We don't sell AI. We sell <b>coherent implementation</b> — making it actually work inside a real system. That's the hard part, and it's our part.</p>
+    <p>The system doesn't fail for lack of clever parts. It fails because the parts don't cohere — each is optimized in isolation while the whole loses people. The same failure repeats at every level: the person's brief window of readiness, the helpline agent, the clinician, the data team — a scarce, irreplaceable human consumed by grind a machine should carry.</p>
+    <div class="reflect"><p>We build a layer that takes that grind off the human and measures whether <b>everyone</b> is better off — patient, agent, clinician, analyst. We call it <b>Key Coherence Indicators (KCI)</b>. Its defining property: <i>you cannot raise the score by making any one stakeholder worse off.</i></p></div>
+    <p><b>This is also how we keep the AI aligned.</b> KCI doesn't just measure the system — it points the technology at the people it's meant to serve. Because the only way the score rises is everyone being better off, the AI can't optimize for clicks, throughput, or any proxy at a stakeholder's expense. The same rule keeps the human and the machine focused on the same thing: the patient — not the metric.</p>
+    <details class="more"><summary>How KCI works, briefly</summary>
+      <div class="mbody">
+        <p>Most systems measure parts — beds filled, calls closed, dollars spent — and the parts quietly compete. KCI measures the <i>whole</i>: is information flowing without friction, is the time from reach-out to care shrinking, is anyone being left behind? It's a single score with an anti-extraction property baked into the math — a gain that comes at another stakeholder's expense lowers the total. (Subject of a provisional patent filed 2026-03-24.)</p>
+        <p>We don't sell AI — anyone can claim AI. We sell <b>coherent implementation</b>: making it actually work inside a real system. That's the hard part, and it's our part.</p>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -133,7 +145,7 @@
   <div class="wrap">
     <div class="kick">See it live</div>
     <h2>The Bridge — a quiet place to start.</h2>
-    <p>A no-account, no-login companion for the people who don't knock on the door. It meets a person where they are, holds their progress, and hands them to a real person already grounded — one tap to the Service Helpline, 24/7. Walk it on your phone:</p>
+    <p>A no-account, no-login companion for the people who don't knock on the door. It meets a person where they are, holds their progress through a hard night, and hands them to a real person already grounded — one tap to the Service Helpline, 24/7. Walk it on your phone:</p>
     <a class="btn green" href="https://aquietstart.org" target="_blank" rel="noopener">Open aquietstart.org →</a>
     <a class="btn ghost" href="https://aquietstart.org/connect.html" target="_blank" rel="noopener">The connection finder →</a>
   </div>
@@ -141,13 +153,13 @@
 
 <section>
   <div class="wrap">
-    <div class="kick">Security &amp; sovereignty</div>
+    <div class="kick">Security, privacy &amp; confidentiality</div>
     <h2>Private by design — not by promise.</h2>
     <p>The most common question first: <i>if a person's data stays on their phone, how do you measure reach?</i> Here's the whole answer in one picture.</p>
     <div class="svgwrap">
       <svg viewBox="0 0 940 560" xmlns="http://www.w3.org/2000/svg" role="img" font-family="Georgia, serif">
         <title>Where your words live</title>
-        <rect x="0" y="0" width="940" height="560" rx="0" fill="#0E1116"/>
+        <rect x="0" y="0" width="940" height="560" fill="#0E1116"/>
         <text x="470" y="58" text-anchor="middle" fill="#E8EEF5" font-size="34" font-weight="bold">Where your words live</text>
         <text x="470" y="90" text-anchor="middle" fill="#2BB673" font-size="17" font-style="italic" font-family="Calibri, Arial, sans-serif">Private by design — not by promise.</text>
         <rect x="48" y="128" width="372" height="358" rx="16" fill="#15211B" stroke="#234634" stroke-width="1.5"/>
@@ -178,6 +190,12 @@
         <text x="470" y="524" text-anchor="middle" fill="#2BB673" font-size="19" font-weight="bold" font-family="Calibri, Arial, sans-serif">Reach is measured. Privacy is never touched.</text>
       </svg>
     </div>
+    <details class="more"><summary>42 CFR Part 2, in plain terms — and why it doesn't attach to the Bridge</summary>
+      <div class="mbody">
+        <p>Part 2 is the federal rule that gives SUD records special protection. The 2024 Final Rule (compliance required <b>February 16, 2026</b>) aligned much of it with HIPAA — a single consent can now cover treatment/payment/operations, redisclosure rules eased for HIPAA-covered entities, and "SUD counseling notes" got psychotherapy-note-level protection. Across the field, the hard problem is that information exchanges largely rely on <i>"trust, not verification"</i> for consent, and front-line staff can't reasonably manage every nuance by hand.</p>
+        <p><b>The Bridge sidesteps the whole question: it creates no Part 2 record.</b> No identity, no SUD record, nothing transmitted — so Part 2 simply doesn't attach. And when we extend into provider-facing tools (a separate, HIPAA-lane build), we design them <b>Part 2-aware from the start</b> — consent-management as a first-class feature, not an afterthought. We speak this language fluently; it's a feature, not a footnote.</p>
+      </div>
+    </details>
   </div>
 </section>
 
@@ -191,20 +209,33 @@
       <div class="tier"><div class="tg">Tier 1</div><div class="td"><b>On-device AI.</b> Richer conversation that still never leaves the phone. Same crisis override, same no-diagnosis rule.</div></div>
       <div class="tier opt"><div class="tg">Tier 2</div><div class="td"><b>Cloud assist — optional, opt-in, no PHI. Off by default; not used in the pilot.</b> Shown only to demonstrate the ceiling.</div></div>
     </div>
-    <p class="note">The rule across all of it: the AI proposes, the deterministic safety layer disposes.</p>
+    <details class="more"><summary>How we prevent the things that worry people (hallucination, mislabeling, crisis)</summary>
+      <div class="mbody">
+        <p><b>Crisis is never AI-judged.</b> A fixed, deterministic check routes any sign of danger straight to 988 / 911 / the Helpline. No model decides whether someone is safe.</p>
+        <p><b>No mislabeling, and corrections are accepted.</b> If a person says "I didn't say I was angry," the companion apologizes and stops — it never insists on an interpretation the person rejected. This behavior is covered by an automated regression test suite so it can't quietly regress.</p>
+        <p><b>No diagnosis, ever.</b> Medical/symptom questions get supportive routing to a real person — never an assessment or a dose.</p>
+        <p><b>The rule across every tier:</b> the AI proposes, the deterministic safety layer disposes. When AI is added, its output is re-checked by the same Safe-Mode guardrails before anything is shown. Worst case is always Tier-0 behavior.</p>
+      </div>
+    </details>
   </div>
 </section>
 
 <section>
   <div class="wrap">
-    <div class="kick">In motion</div>
-    <h2>A two-minute walk-through.</h2>
-    <p>The plain-English story — the problem, the solution, why it's secure, and the mission. (Built to be forwarded to staff and stakeholders.)</p>
-    <div class="vids" id="vids"></div>
+    <div class="kick">What this opens</div>
+    <h2>The same idea, across the system.</h2>
+    <p>The Bridge is the first of these — the same move (a specialized agent that gives a scarce human their time back) fits everywhere the system loses people:</p>
+    <ul class="clean">
+      <li><b>Connection data, kept true</b> — bed/provider availability stays current and feeds the network picture instead of fighting it.</li>
+      <li><b>Teams kept aligned</b> — when an operational change ripples across units, it too often reaches the people who must execute it late, creating rushed turnarounds and avoidable friction. A coherence layer keeps everyone working from one current picture.</li>
+      <li><b>Provider communication</b> — keep policy, guidance, and support coherent between the county and its providers.</li>
+      <li><b>Analytics, freed</b> — let the data team use the data to improve the system, instead of wrangling it.</li>
+    </ul>
+    <p class="note">Each is a separate conversation — the point is that the pilot proves the pattern.</p>
   </div>
 </section>
 
-<section id="deck">
+<section>
   <div class="wrap">
     <div class="kick">Built to fit</div>
     <h2>Aligned with California's behavioral health transformation.</h2>
@@ -215,7 +246,6 @@
       <li><b>Culturally and linguistically responsive</b> — multilingual by design (Spanish first, then the full supported set).</li>
       <li><b>Outcomes, transparency, and disparity reduction</b> — measured honestly, in the system's own language, with privacy intact.</li>
     </ul>
-    <p class="note">A full slide deck is available on request.</p>
   </div>
 </section>
 
@@ -224,11 +254,19 @@
     <div class="kick">The ask</div>
     <h2>Sixty days. No risk to your systems.</h2>
     <ul class="clean">
-      <li>A patient-facing pilot only — <b>no PHI, no procurement, nothing touching SAPC systems.</b></li>
+      <li>A patient-facing pilot only — <b>no PHI, no procurement, nothing touching county systems.</b></li>
       <li>Measured against the system's own metrics — the goal: <b>more people connecting to care</b>, plus capacity relief for the team.</li>
-      <li>Clean go / expand / stop at 60 days. If it doesn't move, we shut it down with nothing lost.</li>
-      <li>What it opens next: connection data kept true, meeting-coherence for your team, provider communication, analytics freed.</li>
+      <li>A clean go / expand / stop at 60 days. If it doesn't move, we shut it down with nothing lost.</li>
     </ul>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kick">In motion</div>
+    <h2>A short walk-through.</h2>
+    <p>The plain-English story — the problem, the solution, why it's secure, and the mission. Built to be forwarded to staff and stakeholders.</p>
+    <div class="vids" id="vids"></div>
   </div>
 </section>
 
@@ -238,19 +276,19 @@
     <h2>Built by people who lived inside the system.</h2>
     <div class="card"><h3>Coherence Systems</h3><p>A healthcare-systems firm with deep Pacific-Northwest domain depth — credentialing, behavioral-health recruiting, and the AI implementation layer. Service-Disabled Veteran-Owned Small Business.</p></div>
     <div class="card"><h3>Dr. Suzanne M. Verreault, Psy.D. — Clinical SME</h3><p>Licensed clinical psychologist; helped stand up the SASH helpline. Designs the clinical model and reviews every word the companion says for fidelity.</p></div>
+    <p style="margin-top:18px"><a class="btn ghost" href="tech.html">For the technical team — architecture &amp; security →</a></p>
   </div>
 </section>
 
 <footer>
   <div class="wrap">
-    A private brief from Coherence Systems · please don't share publicly.<br>
+    A private overview from Coherence Systems · please don't share publicly.<br>
     The opposite of addiction is connection — and this is the instrument that helps you reach the 95%.
   </div>
 </footer>
 
 <script>
-/* ---- soft access gate (friction + privacy only; NOT security — no PHI here) ---- */
-var ACCESS_CODE = "r95";          /* change or set to "" to disable the gate */
+var ACCESS_CODE = "r95";          /* soft gate (friction + privacy only; NOT security; no PHI here). "" to disable. */
 (function(){
   if(!ACCESS_CODE){return;}
   var gate=document.getElementById("gate");
@@ -267,7 +305,6 @@ var ACCESS_CODE = "r95";          /* change or set to "" to disable the gate */
   input.focus();
 })();
 
-/* ---- videos: paste unlisted URLs here; empty slots render as a tasteful placeholder ---- */
 var VIDEOS = [
   { title: "The Bridge — a 2-minute overview", url: "" },
   { title: "Coherence — the bigger picture", url: "" }
