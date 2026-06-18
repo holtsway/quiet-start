@@ -16,7 +16,13 @@
   .wrap{max-width:820px;margin:0 auto;padding:0 22px}
   a{color:var(--blue)}
   .kick{font-size:12px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);font-weight:700;margin:0 0 12px}
-  header.hero{padding:48px 0 28px;border-bottom:1px solid var(--border)}
+  .topnav{position:sticky;top:0;z-index:40;background:rgba(14,17,22,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .nav-wrap{max-width:860px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .nav-brand{font-family:Georgia,serif;font-weight:700;font-size:15px;color:var(--text);text-decoration:none}
+  .nav-links{display:flex;gap:16px;flex-wrap:wrap}
+  .nav-links a{font-size:13px;color:var(--mute);text-decoration:none}
+  .nav-links a:hover,.nav-links a.active{color:var(--text)}
+  header.hero{padding:40px 0 28px;border-bottom:1px solid var(--border)}
   .hero h1{font-size:38px;line-height:1.06;margin:0 0 12px}
   .hero p{color:var(--mute);max-width:640px;margin:0}
   .back{display:inline-block;color:var(--mute);text-decoration:none;font-size:14px;margin-bottom:22px}
@@ -53,12 +59,21 @@
   </div>
 </div>
 
+<nav class="topnav"><div class="nav-wrap">
+  <a class="nav-brand" href="index.html">Coherence Systems</a>
+  <div class="nav-links">
+    <a href="index.html">Overview</a>
+    <a href="clinical.html">For Clinical Leaders</a>
+    <a href="tech.html" class="active">Our Approach</a>
+    <a href="vision.html">Where This Goes</a>
+  </div>
+</div></nav>
+
 <header class="hero">
   <div class="wrap">
-    <a class="back" href="index.html">← back to the overview</a>
-    <div class="kick">For the technical team</div>
-    <h1>Architecture &amp; security.</h1>
-    <p>How the Bridge actually works — the data model, the safety design, the AI guardrails, and the regulatory posture. Honest markers throughout: <span class="tag live">LIVE</span> = shipped today, <span class="tag des">DESIGNED</span> = specified, not yet built.</p>
+    <div class="kick">Our approach</div>
+    <h1>Why each piece is built the way it is.</h1>
+    <p>The questions any partner asks — privacy, scale, what runs where — answered component by component: <b>no PHI by default</b>, deterministic safety, and a design that works on low-bandwidth devices. Honest markers throughout: <span class="tag live">LIVE</span> = shipped today, <span class="tag des">DESIGNED</span> = specified, not yet built.</p>
   </div>
 </header>
 

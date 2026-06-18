@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="robots" content="noindex,nofollow" />
+<title>Where This Goes — Coherence Systems</title>
+<meta name="theme-color" content="#0E1116" />
+<style>
+  :root{--bg:#0E1116;--panel:#161C25;--panel2:#121a24;--border:#232C38;--blue:#3A8BFF;--green:#2BB673;
+        --text:#E8EEF5;--mute:#8A96A5;--dim:#6F7A88;--soft:#cdd6e1;--greenline:#234634;--greenbg:#15211B;}
+  *,*::before,*::after{box-sizing:border-box}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,system-ui,sans-serif;font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  h1,h2,h3,.serif{font-family:Georgia,"Times New Roman",serif}
+  .wrap{max-width:860px;margin:0 auto;padding:0 22px}
+  a{color:var(--text)}
+  .kick{font-size:12.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--green);font-weight:700;margin:0 0 14px}
+  .topnav{position:sticky;top:0;z-index:40;background:rgba(14,17,22,.92);backdrop-filter:blur(8px);border-bottom:1px solid var(--border)}
+  .nav-wrap{max-width:860px;margin:0 auto;padding:11px 22px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+  .nav-brand{font-family:Georgia,serif;font-weight:700;font-size:15px;color:var(--text);text-decoration:none}
+  .nav-links{display:flex;gap:16px;flex-wrap:wrap}
+  .nav-links a{font-size:13px;color:var(--mute);text-decoration:none}
+  .nav-links a:hover,.nav-links a.active{color:var(--text)}
+  header.hero{padding:50px 0 34px;border-bottom:1px solid var(--border)}
+  .hero h1{font-size:40px;line-height:1.06;margin:0 0 14px}
+  .hero p.lead{font-size:19px;color:var(--mute);max-width:660px;margin:0;line-height:1.45}
+  .tag{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.05em;border-radius:6px;padding:3px 10px;background:#1b2230;border:1px solid var(--border);color:#8aa4c8;margin-bottom:16px}
+  section{padding:42px 0;border-bottom:1px solid var(--border)}
+  section h2{font-size:28px;line-height:1.12;margin:0 0 14px}
+  section p{color:var(--soft);margin:0 0 16px}
+  .reflect{background:var(--greenbg);border:1px solid var(--greenline);border-radius:14px;padding:18px 20px;margin:18px 0}
+  .reflect p{margin:0;color:#cfe6d8}
+  .web{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0}
+  .chip{background:var(--panel);border:1px solid var(--border);border-radius:99px;padding:7px 13px;font-size:13px;color:var(--soft)}
+  ul.clean{list-style:none;padding:0;margin:12px 0}
+  ul.clean li{padding:9px 0 9px 26px;position:relative;color:var(--soft);font-size:15.5px;border-bottom:1px solid var(--border)}
+  ul.clean li::before{content:"";position:absolute;left:4px;top:17px;width:8px;height:8px;border-radius:50%;background:var(--green)}
+  .honest{background:#1d1518;border:1px solid #3a2630;border-radius:12px;padding:14px 18px;margin:18px 0;color:#e9c3c9;font-size:14.5px}
+  footer{padding:34px 0 60px;color:var(--dim);font-size:13px;text-align:center}
+  .back{display:inline-block;color:var(--mute);text-decoration:none;font-size:14px}
+  #gate{position:fixed;inset:0;background:var(--bg);z-index:50;display:flex;align-items:center;justify-content:center;padding:24px}
+  #gate[hidden]{display:none}
+  #gate .box{max-width:380px;width:100%;text-align:center}
+  #gate input{width:100%;background:var(--panel);border:1px solid var(--border);color:var(--text);border-radius:12px;padding:14px;font:inherit;text-align:center;letter-spacing:.08em;margin:12px 0}
+  #gate button{width:100%;background:var(--blue);color:#fff;border:none;border-radius:12px;padding:14px;font:inherit;font-weight:600;cursor:pointer}
+  #gate .err{color:#e98b8b;font-size:13px;height:16px;margin-top:8px}
+  @media(max-width:620px){.hero h1{font-size:30px}section h2{font-size:23px}.nav-links{gap:11px}.nav-links a{font-size:12px}}
+</style>
+</head>
+<body>
+
+<div id="gate" hidden>
+  <div class="box">
+    <div class="kick">Coherence Systems</div>
+    <h1 class="serif" style="font-size:26px">Where this goes</h1>
+    <input id="gate-input" type="text" autocomplete="off" placeholder="access code" aria-label="access code" />
+    <button id="gate-go" type="button">Enter</button>
+    <div class="err" id="gate-err"></div>
+  </div>
+</div>
+
+<nav class="topnav"><div class="nav-wrap">
+  <a class="nav-brand" href="index.html">Coherence Systems</a>
+  <div class="nav-links">
+    <a href="index.html">Overview</a>
+    <a href="clinical.html">For Clinical Leaders</a>
+    <a href="tech.html">Our Approach</a>
+    <a href="vision.html" class="active">Where This Goes</a>
+  </div>
+</div></nav>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="tag">PHASE II · DIRECTION, NOT DELIVERED</span>
+    <h1>Where this goes.</h1>
+    <p class="lead">The 60-day pilot proves the pattern on one front door. Here's the arc that opens — shown honestly. None of this ships in the pilot; it's the direction the same idea points.</p>
+  </div>
+</header>
+
+<section>
+  <div class="wrap">
+    <div class="kick">From one door to a connected pathway</div>
+    <h2>The person doesn't live in one program. They cross all of them.</h2>
+    <p>A single person with a substance use disorder rarely touches just "treatment." Over a year they may pass through a dozen funding and referral streams — each a silo, each with its own intake, each a place to lose the thread:</p>
+    <div class="web">
+      <span class="chip">AB109 reentry</span><span class="chip">Adult Drug Court</span><span class="chip">Family Dependency Drug Court</span><span class="chip">DCFS / child welfare</span><span class="chip">CalWORKS</span><span class="chip">General Relief</span><span class="chip">Probation / Day Reporting</span><span class="chip">Prop 47 / Prop 57</span><span class="chip">Perinatal services</span><span class="chip">Women &amp; children's residential</span><span class="chip">Title IV-E</span>
+    </div>
+    <p>Coherence is the connective tissue between them — so a person's pathway stays whole as they move, instead of restarting at every seam. It maps almost exactly onto <b>CalAIM</b>'s direction: no-wrong-door, closed-loop referrals, and cross-sector data exchange.</p>
+    <div class="reflect"><p><b>The flagship example — justice-involved reentry.</b> Someone leaving custody has a narrow window to land in treatment, benefits, and housing before they fall back. Today those hand-offs are manual and brittle. A coherence layer keeps the connection intact across probation, treatment, and benefits — exactly the population CalAIM's reentry initiative is built to catch.</p></div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kick">What makes it possible</div>
+    <h2>You can't connect these without solving consent.</h2>
+    <p>The reason this web has never been stitched together isn't ambition — it's <b>confidentiality</b>. SUD records carry special protection (42 CFR Part 2), and today most data-sharing runs on "trust, not verification." Connecting the pathway requires <b>consent coherence</b>: the right information moving only with the right permission, tracked and revocable.</p>
+    <p>That's the one hard thing we're already fluent in — it's the same Part 2 work behind the pilot's privacy design. The day-to-day wins (reach, capacity, cleaner data) and this larger vision are linked by it. It's an extension of what we do, not a leap.</p>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="kick">A system that keeps improving</div>
+    <h2>The approach gets better the more it's used.</h2>
+    <p>Coherence isn't a fixed feature set — it's a way of measuring whether the whole system is better off, applied wherever a scarce human is buried in grind. Each place it's applied teaches the next. Across the kinds of systems public health runs, that compounds into real depth over time.</p>
+    <ul class="clean">
+      <li><b>Reach, at scale</b> — the same instrument pointed at more of the 95%, in more languages, through more front doors.</li>
+      <li><b>Coherence, at scale</b> — the connected pathway above, one sector at a time.</li>
+      <li><b>Capacity, at scale</b> — the grind lifted off more roles, so frozen headcount stops being the ceiling.</li>
+      <li><b>Equity, at scale</b> — disparity measured and closed deliberately, not left to chance.</li>
+    </ul>
+    <div class="honest">Honest marker: everything on this page is <b>direction</b>. The pilot is a no-PHI patient front door, 60 days, nothing touching county systems. We never let the vision outrun what's actually true — that's the whole point of building on coherence.</div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <a class="back" href="index.html">← back to the overview</a><br><br>
+    Coherence Systems · a private overview — please don't share publicly.
+  </div>
+</footer>
+
+<script>
+var ACCESS_CODE = "r95";
+(function(){
+  if(!ACCESS_CODE){return;}
+  var gate=document.getElementById("gate");
+  if(sessionStorage.getItem("brief.ok")==="1"){return;}
+  gate.hidden=false; document.body.style.overflow="hidden";
+  var input=document.getElementById("gate-input"), err=document.getElementById("gate-err");
+  function tryCode(){
+    if(input.value.trim().toLowerCase()===ACCESS_CODE.toLowerCase()){
+      sessionStorage.setItem("brief.ok","1"); gate.hidden=true; document.body.style.overflow="";
+    }else{ err.textContent="That code didn't match. Try again."; }
+  }
+  document.getElementById("gate-go").addEventListener("click",tryCode);
+  input.addEventListener("keydown",function(e){if(e.key==="Enter")tryCode();});
+  input.focus();
+})();
+</script>
+</body>
+</html>
